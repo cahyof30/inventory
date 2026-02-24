@@ -18,7 +18,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./ # Mengambil semua file project dari GitHub
-          server-dir: /domains/cahyof30.my.id/inventory_app/
+          server-dir: /home/cahyofmy/domains/cahyof30.my.id/inventory_app/
           exclude: |
             **/public/**
             .git*
@@ -31,4 +31,4 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: public/ # Hanya mengambil isi folder 'public' dari GitHub
-          server-dir: /domains/cahyof30.my.id/public_html/inventory/
+          server-dir: /home/cahyofmy/domains/cahyof30.my.id/public_html/inventory/

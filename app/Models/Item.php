@@ -44,7 +44,7 @@ class Item extends Model
 
     protected static function booted(): void
     {
-       static::saving(function (Item $item) {
+       static::creating(function (Item $item) {
         // 1. Generate atau Update Kode Inventaris jika ada perubahan input
         // Kita gunakan !exists untuk data baru, isDirty untuk perubahan data lama
         if (!$item->exists || $item->isDirty(['company_id', 'category_id', 'purchase_date'])) {

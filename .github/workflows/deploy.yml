@@ -17,6 +17,9 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftp # Pastikan protokol eksplisit
+          port: 21      # Port standar FTP
+          concurrency: 1 # <--- TAMBAHKAN INI
           local-dir: ./ # Mengambil semua file project dari GitHub
           server-dir: /home/cahyofmy/domains/cahyof30.my.id/inventory_app/
           exclude: |
@@ -30,5 +33,8 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftp # Pastikan protokol eksplisit
+          port: 21      # Port standar FTP
+          concurrency: 1 # <--- TAMBAHKAN INI
           local-dir: public/ # Hanya mengambil isi folder 'public' dari GitHub
           server-dir: /home/cahyofmy/domains/cahyof30.my.id/public_html/inventory/

@@ -17,15 +17,19 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftp # Pastikan protokol eksplisit
-          port: 21      # Port standar FTP
-          concurrency: 1 # <--- TAMBAHKAN INI
+          protocol: sftp # Pastikan protokol eksplisit
+          port: 22      # Port standar FTP
+          timeout: 600000
+          # concurrency: 1 # <--- TAMBAHKAN INI
           local-dir: ./ # Mengambil semua file project dari GitHub
           server-dir: /home/cahyofmy/domains/cahyof30.my.id/inventory_app/
           exclude: |
-            **/public/**
-            .git*
-            .github/workflows/**
+             **/.git*
+             **/.github*
+             **/node_modules/**
+             **/vendor/**
+             storage/**
+             tests/**
 
       - name: 🌐 Deploy Folder Public ke Subdomain (Public)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -33,8 +37,9 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftp # Pastikan protokol eksplisit
-          port: 21      # Port standar FTP
-          concurrency: 1 # <--- TAMBAHKAN INI
+          protocol: sftp # Pastikan protokol eksplisit
+          port: 22
+          timeout: 600000      # Port standar FTP
+          # concurrency: 1 # <--- TAMBAHKAN INI
           local-dir: public/ # Hanya mengambil isi folder 'public' dari GitHub
           server-dir: /home/cahyofmy/domains/cahyof30.my.id/public_html/inventory/

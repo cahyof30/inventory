@@ -17,7 +17,7 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: sftp # Pastikan protokol eksplisit
+          protocol: ftps # Pastikan protokol eksplisit
           port: 22      # Port standar FTP
           timeout: 600000
           # concurrency: 1 # <--- TAMBAHKAN INI
@@ -37,7 +37,7 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: sftp # Pastikan protokol eksplisit
+          protocol: ftps # Pastikan protokol eksplisit
           port: 22
           timeout: 600000      # Port standar FTP
           # concurrency: 1 # <--- TAMBAHKAN INI

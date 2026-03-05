@@ -7,6 +7,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Group;
 use Filament\Schemas\Schema;
 
 class ItemForm
@@ -26,24 +27,35 @@ class ItemForm
                     ->relationship('category', 'name')
                     ->required()
                     ->searchable()
-                    ->preload(),
+                    ->preload()
+                    ->live(),
+
+                Group::make()
+                    ->relationship('vehicleDetail')
+                    ->visible(fn ($get) => $get('category_id') &&
+                        \App\Models\ItemCategory::find($get('category_id'))?->slug === 'kendaraan'
+                    )
+                    ->schema([
+                        TextInput::make('license_plate')
+                            ->label('No. Polisi (Nopol)')
+                            ->placeholder('Contoh: AB 1234 CD')
+                            ->required(),
+                    ]),
 
                 TextInput::make('name')
-                    ->label("Nama Barang")
+                    ->label('Nama Barang')
                     ->required(),
 
                 TextInput::make('brand')
-                    ->label("Merk"),
+                    ->label('Merk'),
 
                 TextInput::make('purchase_price')
                     ->label('Harga Beli')
                     ->numeric()
-                    ->required()
                     ->prefix('IDR'),
 
                 DatePicker::make('purchase_date')
-                    ->label('Tanggal Pembelian')
-                    ->required(),
+                    ->label('Tanggal Pembelian'),
 
                 Select::make('condition')
                     ->label('Kondisi Barang')
@@ -65,10 +77,14 @@ class ItemForm
                 //     ->disabled()
                 //     ->dehydrated()
                 //     ->columnSpanFull(),
-
+                Select::make('location_id')
+                    ->label('Lokasi')
+                    ->relationship('location', 'name')
+                    ->required()
+                    ->searchable()
+                    ->preload(),
                 Textarea::make('description')
-                    ->label('Deskripsi')
-                    ->columnSpanFull(),
+                    ->label('Deskripsi'),
 
                 // Textarea::make('specifications')
                 //     ->columnSpanFull(),

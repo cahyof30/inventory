@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->text('qr_code')->nullable();
             $table->text('barcode')->nullable();
+            $table->foreignId('location_id')->nullable()->constrained('locations')->onDelete('set null');
             $table->text('description')->nullable();
             $table->json('specifications')->nullable();
             $table->timestamps();

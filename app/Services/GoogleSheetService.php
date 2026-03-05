@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Google\Client;
 use Google\Service\Sheets;
+use Google\Service\Sheets\ValueRange;
 
 class GoogleSheetService
 {
@@ -18,64 +19,63 @@ class GoogleSheetService
         $client->addScope(Sheets::SPREADSHEETS);
 
         $this->service = new Sheets($client);
-        // $this->spreadsheetId = env('GOOGLE_SHEET_ID');
         $this->spreadsheetId = '1vgGygJg_hZEpdyPqL4TENB9ghxj1_OS7bgT-T8QIkI0';
-    }
-
-    public function appendRow(array $data): void
-    {
-        $client = $this->service->getClient();
-
-        $url = "https://sheets.googleapis.com/v4/spreadsheets/{$this->spreadsheetId}/values/Sheet1!A1:append?valueInputOption=RAW";
-
-        $body = [
-            'values' => [
-                array_values($data),
-            ],
-        ];
-
-        $request = new \GuzzleHttp\Psr7\Request(
-            'POST',
-            $url,
-            ['Content-Type' => 'application/json'],
-            json_encode($body)
-        );
-
-        $client->authorize()->send($request);
     }
 
     public function updateRowById(string $code, array $data): void
     {
-        // Ambil semua data kolom A (ID)
-        $response = $this->service->spreadsheets_values->get(
-            $this->spreadsheetId,
-            'Sheet1!A:A'
-        );
-
+        $response = $this->service->spreadsheets_values->get($this->spreadsheetId, 'Sheet1!A:A');
         $rows = $response->getValues();
 
-        if (! $rows) {
-            return;
-        }
+        if ($rows) {
+            foreach ($rows as $index => $row) {
+                if (isset($row[0]) && $row[0] === $code) {
+                    $rowNumber = $index + 1;
+                    $body = new ValueRange(['values' => [array_values($data)]]);
 
-        foreach ($rows as $index => $row) {
-            if ($row[0] === $code) {
+                    $this->service->spreadsheets_values->update(
+                        $this->spreadsheetId,
+                        "Sheet1!A{$rowNumber}",
+                        $body,
+                        ['valueInputOption' => 'RAW']
+                    );
 
-                $rowNumber = $index + 1; // karena sheet mulai dari 1
-
-                $body = new \Google\Service\Sheets\ValueRange;
-                $body->setValues([array_values($data)]);
-
-                $this->service->spreadsheets_values->update(
-                    $this->spreadsheetId,
-                    "Sheet1!A{$rowNumber}",
-                    $body,
-                    ['valueInputOption' => 'RAW']
-                );
-
-                break;
+                    return; // Keluar jika sudah update
+                }
             }
         }
+
+        // Jika tidak ditemukan di loop atas, maka TAMBAH BARU
+        $this->appendRows([$data]);
+    }
+
+    public function appendRows(array $multipleData): void
+    {
+         if (count($multipleData) === count($multipleData, COUNT_RECURSIVE)) {
+        $multipleData = [$multipleData];
+    }
+
+    // Hilangkan semua key dan paksa menjadi array numerik murni
+    $formattedValues = [];
+    foreach ($multipleData as $row) {
+        $formattedValues[] = array_values((array) $row);
+    }
+
+    $body = new \Google\Service\Sheets\ValueRange([
+        'values' => $formattedValues
+    ]);
+
+    $params = [
+        'valueInputOption' => 'RAW',
+        'insertDataOption' => 'INSERT_ROWS'
+    ];
+
+    $this->service->spreadsheets_values->append(
+        $this->spreadsheetId,
+        'Sheet1!A1',
+        $body,
+        $params
+    );
     }
 
     public function deleteRowById(string $code): void

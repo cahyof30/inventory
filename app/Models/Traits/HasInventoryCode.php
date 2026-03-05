@@ -2,6 +2,8 @@
 
 namespace App\Models\Traits;
 
+use Milon\Barcode\DNS1D;
+
 trait HasInventoryCode
 {
     protected static function bootHasInventoryCode(): void
@@ -39,7 +41,7 @@ trait HasInventoryCode
 
         $number = $last ? ((int) substr($last->code, -5)) + 1 : 1;
 
-        $this->code = $prefix . str_pad($number, 5, '0', STR_PAD_LEFT);
+        $this->code = $prefix.str_pad($number, 5, '0', STR_PAD_LEFT);
     }
 
     /**
@@ -49,7 +51,7 @@ trait HasInventoryCode
     {
         $originalCode = $this->getOriginal('code');
 
-        if (!$originalCode) {
+        if (! $originalCode) {
             return;
         }
 
@@ -64,6 +66,34 @@ trait HasInventoryCode
 
         $prefix = "{$companySlug}-{$categoryCode}-{$year}";
 
-        $this->code = $prefix . $sequence;
+        $this->code = $prefix.$sequence;
     }
+
+    // public function getBarcodeBase64Attribute(): string
+    // {
+    //     if (! $this->code) {
+    //         return '';
+    //     }
+
+    //     $dns = new DNS1D;
+    //     $dns->setStorPath(storage_path('framework/barcode/'));
+
+    //     return $dns->getBarcodePNG($this->code, 'C128');
+    // }
+    public function getBarcodeBase64Attribute(): string
+{
+    if (!$this->code) {
+        return '';
+    }
+
+    $dns = new DNS1D();
+    $dns->setStorPath(storage_path('framework/barcode/'));
+
+    return $dns->getBarcodePNG(
+        $this->code,
+        'C128',
+        3,   // scale (lebar garis)
+        80   // height (tinggi barcode)
+    );
+}
 }

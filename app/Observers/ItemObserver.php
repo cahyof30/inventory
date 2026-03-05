@@ -12,25 +12,27 @@ class ItemObserver
      */
     public function created(Item $item): void
     {
-        $sheet = new GoogleSheetService;
-        $conditionLabel = match ($item->condition) {
-            'good' => 'Baik',
-            'broken' => 'Rusak',
-            default => $item->condition,
-        };
-        $sheet->appendRow([
-            $item->code,
-            $item->company?->company_name,
-            $item->category?->name,
-            // $item->item_type,
-            $item->name,
-            $item->brand ?? '-',
-            $item->purchase_price,
-            $item->purchase_date ?? '-',
-            $conditionLabel,
-            // $item->qr_code,
-            $item->created_at,
-        ]);
+        // sleep(1); // Beri jeda 1 detik tiap baris
+        // $sheet = new GoogleSheetService;
+        // $conditionLabel = match ($item->condition) {
+        //     'good' => 'Baik',
+        //     'broken' => 'Rusak',
+        //     default => $item->condition,
+        // };
+        // $sheet->appendRows([
+        //     $item->code,
+        //     $item->company?->company_name,
+        //     $item->category?->name,
+        //     // $item->item_type,
+        //     $item->name,
+        //     $item->brand ?? '-',
+        //     $item->location?->name ?? '-',
+        //     $item->purchase_price,
+        //     $item->purchase_date ?? '-',
+        //     $conditionLabel,
+        //     // $item->qr_code,
+        //     $item->description ?? '-',
+        // ]);
     }
 
     /**
@@ -38,25 +40,27 @@ class ItemObserver
      */
     public function updated(Item $item): void
     {
-        $sheet = new GoogleSheetService;
-        $conditionLabel = match ($item->condition) {
-            'good' => 'Baik',
-            'broken' => 'Rusak',
-            default => $item->condition,
-        };
-        $sheet->updateRowById($item->code, [
-            $item->code,
-            optional($item->company)->company_name,
-            optional($item->category)->name,
-            // $item->item_type,
-            $item->name,
-            $item->brand ?? '-',
-            $item->purchase_price,
-            $item->purchase_date ?? '-',
-            $conditionLabel,
-            // $item->qr_code,
-            $item->created_at,
-        ]);
+        // sleep(1); // Beri jeda 1 detik tiap baris
+        // $sheet = new GoogleSheetService;
+        // $conditionLabel = match ($item->condition) {
+        //     'good' => 'Baik',
+        //     'broken' => 'Rusak',
+        //     default => $item->condition,
+        // };
+        // $sheet->updateRowById($item->code, [
+        //     $item->code,
+        //     optional($item->company)->company_name,
+        //     optional($item->category)->name,
+        //     // $item->item_type,
+        //     $item->name,
+        //     $item->brand ?? '-',
+        //     $item->location?->name ?? '-',
+        //     $item->purchase_price,
+        //     $item->purchase_date ?? '-',
+        //     $conditionLabel,
+        //     // $item->qr_code,
+        //     $item->description ?? '-',
+        // ]);
     }
 
     /**
@@ -64,8 +68,8 @@ class ItemObserver
      */
     public function deleted(Item $item): void
     {
-        $sheet = new GoogleSheetService;
-        $sheet->deleteRowById($item->code);
+        // $sheet = new GoogleSheetService;
+        // $sheet->deleteRowById($item->code);
     }
 
     /**

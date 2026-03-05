@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Traits\HasInventoryCode;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Milon\Barcode\DNS1D;
 
 class Item extends Model
 {
@@ -21,6 +22,7 @@ class Item extends Model
         'condition',
         'image',
         'qr_code',
+        'location_id',
         'description',
         'specifications',
     ];
@@ -42,20 +44,28 @@ class Item extends Model
         }
     }
 
+    public function getBarcodeBase64Attribute()
+    {
+        $dns = new DNS1D;
+        $dns->setStorPath(storage_path('framework/barcode/'));
+
+        return $dns->getBarcodePNG($this->code, 'C128');
+    }
+
     protected static function booted(): void
     {
-       static::creating(function (Item $item) {
-        // 1. Generate atau Update Kode Inventaris jika ada perubahan input
-        // Kita gunakan !exists untuk data baru, isDirty untuk perubahan data lama
-        if (!$item->exists || $item->isDirty(['company_id', 'category_id', 'purchase_date'])) {
-            $item->generateInventoryCode();
-        }
+        static::creating(function (Item $item) {
+            // 1. Generate atau Update Kode Inventaris jika ada perubahan input
+            // Kita gunakan !exists untuk data baru, isDirty untuk perubahan data lama
+            if (! $item->exists || $item->isDirty(['company_id', 'category_id', 'purchase_date'])) {
+                $item->generateInventoryCode();
+            }
 
-        // 2. Isi qr_code hanya dengan string kode saja
-        if ($item->code) {
-            $item->qr_code = $item->code;
-        }
-    });
+            // 2. Isi qr_code hanya dengan string kode saja
+            if ($item->code) {
+                $item->qr_code = $item->code;
+            }
+        });
         //     static::creating(function (Item $item) {
         //         $item->generateQr();
         //     });
@@ -68,6 +78,10 @@ class Item extends Model
     public function category()
     {
         return $this->belongsTo(ItemCategory::class);
+    }
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
     }
 
     public function loans()
@@ -88,5 +102,10 @@ class Item extends Model
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function vehicleDetail()
+    {
+        return $this->hasOne(VehicleDetail::class, 'item_id');
     }
 }

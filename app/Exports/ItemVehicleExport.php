@@ -13,7 +13,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 
 // 1. Tambahkan ShouldAutoSize di sini
-class ItemExport implements FromCollection, WithHeadings, WithDrawings, WithMapping, WithColumnFormatting, WithStyles, \Maatwebsite\Excel\Concerns\ShouldAutoSize
+class ItemVehicleExport implements FromCollection, WithHeadings, WithDrawings, WithMapping, WithColumnFormatting, WithStyles, \Maatwebsite\Excel\Concerns\ShouldAutoSize
 {
     protected $records;
 
@@ -25,7 +25,7 @@ class ItemExport implements FromCollection, WithHeadings, WithDrawings, WithMapp
     public function collection()
     {
          return $this->records->filter(function ($item) {
-        return $item->category?->slug !== 'kendaraan';
+        return $item->category?->slug === 'kendaraan';
     })->values();
     }
 
@@ -37,6 +37,7 @@ class ItemExport implements FromCollection, WithHeadings, WithDrawings, WithMapp
             $item->category?->name,
             $item->name,
             $item->brand,
+            $item->vehicleDetail?->license_plate ?? '-',
             $item->location?->name,
             $item->purchase_price,
             match ($item->condition) {
@@ -51,7 +52,7 @@ class ItemExport implements FromCollection, WithHeadings, WithDrawings, WithMapp
 
     public function headings(): array
     {
-        return ['Kode', 'Perusahaan','Kategori', 'Nama Barang', 'Merk',  'Lokasi', 'Harga (IDR)', 'Kondisi', 'QR Code', 'Barcode'];
+        return ['Kode', 'Perusahaan','Kategori', 'Nama Barang', 'Merk',  'No. Polisi', 'Lokasi', 'Harga (IDR)', 'Kondisi', 'QR Code', 'Barcode'];
     }
 
    public function drawings()
@@ -81,7 +82,7 @@ class ItemExport implements FromCollection, WithHeadings, WithDrawings, WithMapp
                     $qrDrawing->setName('QR_' . $item->code);
                     $qrDrawing->setPath($qrPath);
                     $qrDrawing->setHeight(70);
-                    $qrDrawing->setCoordinates('I' . $row);
+                    $qrDrawing->setCoordinates('J' . $row);
                     $drawings[] = $qrDrawing;
                 }
             }
@@ -114,7 +115,7 @@ class ItemExport implements FromCollection, WithHeadings, WithDrawings, WithMapp
                 $barcodeDrawing->setName('BARCODE_' . $item->code);
                 $barcodeDrawing->setPath($barcodePath);
                 $barcodeDrawing->setHeight(35);
-                $barcodeDrawing->setCoordinates('J' . $row);
+                $barcodeDrawing->setCoordinates('K' . $row);
                 $drawings[] = $barcodeDrawing;
             }
 
@@ -137,12 +138,11 @@ class ItemExport implements FromCollection, WithHeadings, WithDrawings, WithMapp
     }
 
     // 2. Set Lebar Kolom G (QR) secara manual
-    $sheet->getColumnDimension('I')->setAutoSize(false);
-    $sheet->getColumnDimension('I')->setWidth(10);
-    // 2. Set Lebar Kolom G (QR) secara manual
     $sheet->getColumnDimension('J')->setAutoSize(false);
-    $sheet->getColumnDimension('J')->setWidth(40);
-
+    $sheet->getColumnDimension('J')->setWidth(10);
+    // 2. Set Lebar Kolom G (QR) secara manual
+    $sheet->getColumnDimension('K')->setAutoSize(false);
+    $sheet->getColumnDimension('K')->setWidth(40);
     // 3. Styling Header & Perataan Tengah (Vertical Alignment)
     return [
         // Header: Bold & Center

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Companies\Schemas;
 
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -17,6 +18,14 @@ class CompanyForm
                  TextInput::make('company_name')
                     ->label('Nama Perusahaan')
                     ->required(),
+                    FileUpload::make('logo')
+                    ->label('Logo Perusahaan')
+                    ->image()
+                    ->disk('public')
+                    ->directory('company-logos')
+                    ->maxSize(1024)
+                    ->acceptedFileTypes(['image/*'])
+                    ->nullable(),
             ]);
     }
 }

@@ -18,11 +18,13 @@ class LoanResource extends Resource
 {
     protected static ?string $model = Loan::class;
 
-    // protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-arrow-left-start-on-rectangle';
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-users';
+    // protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    // protected static ?string $recordTitleAttribute = 'Loan';
+     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-archive-box';
     protected static string|\UnitEnum|null $navigationGroup = 'Peminjaman';
     protected static ?string $navigationLabel = 'Peminjaman';
+    protected static ?string $title = 'Master Peminjaman';
 
 
     public static function form(Schema $schema): Schema

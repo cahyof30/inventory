@@ -8,6 +8,7 @@ use App\Imports\ItemImport;
 use App\Imports\ItemVehicleImport;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -47,7 +48,8 @@ class ItemsTable
                 TextColumn::make('category.name')
                     ->label('Category')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->visible(fn ($livewire) => $livewire->activeTab !== 'kendaraan'),
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('brand')
@@ -154,10 +156,13 @@ class ItemsTable
 
                             $records = $livewire->getSelectedTableRecords()->count() > 0
                                 ? $livewire->getSelectedTableRecords()
-                                    ->filter(fn ($item) => $item->category?->slug === 'kendaraan'
+                                    ->filter(
+                                        fn ($item) => $item->category?->slug === 'kendaraan'
                                     )
                                 : $livewire->getFilteredTableQuery()
-                                    ->whereHas('category', fn ($q) => $q->where('slug', 'kendaraan')
+                                    ->whereHas(
+                                        'category',
+                                        fn ($q) => $q->where('slug', 'kendaraan')
                                     )
                                     ->get();
 
@@ -173,10 +178,13 @@ class ItemsTable
 
                             $records = $livewire->getSelectedTableRecords()->count() > 0
                                 ? $livewire->getSelectedTableRecords()
-                                    ->filter(fn ($item) => $item->category?->slug !== 'kendaraan'
+                                    ->filter(
+                                        fn ($item) => $item->category?->slug !== 'kendaraan'
                                     )
                                 : $livewire->getFilteredTableQuery()
-                                    ->whereHas('category', fn ($q) => $q->where('slug', '!=', 'kendaraan')
+                                    ->whereHas(
+                                        'category',
+                                        fn ($q) => $q->where('slug', '!=', 'kendaraan')
                                     )
                                     ->get();
 
@@ -211,7 +219,15 @@ class ItemsTable
                         ]))
                         ->modalSubmitAction(false)
                         ->modalCancelActionLabel('Tutup'),
-
+                    // Action::make('printSticker')
+                    //     ->label('Cetak Stiker')
+                    //     ->icon('heroicon-o-printer')
+                    //     ->color('success')
+                    //     ->url(fn ($record) => route(
+                    //         'items.print-single-sticker',
+                    //         $record
+                    //     ))
+                    //     ->openUrlInNewTab(),
                     // 3. Tombol Hapus
                     DeleteAction::make(),
                 ])
@@ -223,6 +239,21 @@ class ItemsTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    BulkAction::make('printSticker')
+                        ->label('Cetak Stiker')
+                        ->icon('heroicon-o-printer')
+                        ->color('success')
+                        ->action(function ($records) {
+
+                            $ids = $records->pluck('id');
+
+                            return redirect()->route(
+                                'items.print-sticker',
+                                [
+                                    'ids' => $ids->implode(','),
+                                ]
+                            );
+                        }),
                 ]),
             ]);
     }

@@ -13,6 +13,7 @@ class Company extends Model
     protected $fillable = [
         'slug',
         'company_name',
+        'logo',
     ];
     public $timestamps = true;
 

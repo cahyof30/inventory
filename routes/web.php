@@ -20,3 +20,15 @@ Route::get('/preview-sticker', function () {
     return view('pdf.stickers-preview', compact('items'));
 
 });
+Route::get('/prev2-sticker', function () {
+
+    $items = Item::take(18)->get();
+
+    return view('pdf.sticker-prev2', compact('items'));
+
+});
+
+Route::get(
+    '/items/sticker',
+    [PdfController::class, 'previewSticker']
+)->name('items.sticker');

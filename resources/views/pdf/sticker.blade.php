@@ -4,184 +4,202 @@
 <meta charset="utf-8">
 
 <style>
+@page{
+    margin: 5mm;
+}
 
-        body{
-            background:#e5e5e5;
-            font-family:Arial, sans-serif;
-            padding:20px;
-        }
+body{
+    margin:0;
+    padding:0;
+    font-family: Arial, sans-serif;
+    font-size:9pt;
+    background:#fff;
+}
 
-        .sheet{
-            width:210mm;
-            min-height:297mm;
-            background:white;
-            margin:auto;
-            padding:5mm;
-            box-sizing:border-box;
-        }
+.sheet{
+    width:210mm;
+    min-height:297mm;
+    background:#fff;
+    padding:5mm;
+    box-sizing:border-box;
+    margin:auto;
+}
 
-        .sticker{
-            width:95mm;
-            height:25mm;
+.sticker{
+    width:95mm;
+    height:30mm;
+    border:2px solid #000;
+    border-collapse:collapse;
+}
 
-            border:1px solid #000;
+.sticker td{
+    padding:0;
+}
 
-            display:inline-block;
-            vertical-align:top;
+.logo-cell{
+    width:16mm;
+    text-align:center;
+    vertical-align:middle;
+}
 
-            margin-right:2mm;
-            margin-bottom:2mm;
+.logo-cell img{
+    max-width:15mm;
+    max-height:15mm;
+}
 
-            box-sizing:border-box;
+.info-cell{
+    vertical-align:top;
+    padding:1mm !important;
+}
 
-            padding:2mm;
-        }
+.qr-cell{
+    width:15mm;
+    text-align:center;
+    vertical-align:middle;
+}
 
-        .sticker-table{
-            width:100%;
-            height:100%;
-            border-collapse:collapse;
-        }
+.qr-cell img{
+    width:15mm;
+    height:15mm;
+}
 
-        .logo{
-            width:15mm;
-        }
+.item-name{
+    font-size: 10pt;
+    font-weight:bold;
+    line-height:1.2;
+    padding-top:2mm;
+    height:6mm;
+    overflow:hidden;
+}
 
-        .logo svg{
-            width:15mm !important;
-            height:15mm !important;
-        }
+.item-code{
+    font-size:10pt;
+    font-weight:bold;
+    border-top:2px solid #000;
+    padding-top:3mm;
+}
 
-        .qr{
-            width:15mm;
-        }
-
-        .qr svg{
-            width:15mm !important;
-            height:15mm !important;
-        }
-
-        .content{
-            vertical-align:top;
-            padding-left:2mm;
-            margin-top:3mm;
-        }
-
-        .item-name{
-            font-size:9pt;
-            padding-top:2mm;
-            font-weight:bold;
-            padding-bottom:2mm;
-        }
-
-        .item-code{
-            border-top:2px solid #000;
-            font-size:9pt;
-            padding-top:2mm;
-        }
-
-        .item-location{
-            font-size:9pt;
-            padding:2mm;
-        }
-
-        .item-company{
-            padding-top:1mm !important;
-            margin-bottom:-2mm;
-            font-size:10pt;
-            text-align:center;
-            font-weight:bold;
-        }
-
-    </style>
+.company{
+    height:8mm;
+    border-top:2px solid #000;
+    text-align:center;
+    font-size:10pt;
+    font-weight:bold;
+    vertical-align:middle;
+}
+</style>
 </head>
 <body>
 
-<div class="sheet">
+<div class="sheet" id="sheet">
 
-@foreach($items as $item)
+    <table width="100%" cellspacing="2" cellpadding="0">
 
+        @foreach($items->chunk(2) as $row)
 
-<div class="sticker">
-    <table width="100%">
         <tr>
-            <td width="22%" valign="top">
-              <div class="qr">
-   @php
-$svg = QrCode::size(100)
-    ->margin(1)
-    ->generate($item->qr_code);
 
-$svg = str_replace("\n", '', $svg);
+            @foreach($row as $item)
 
-$dataUri = 'data:image/svg+xml;base64,' . base64_encode($svg);
-@endphp
+            <td width="50%" valign="top">
 
-<img
-    src="{{ $dataUri }}"
-    width="70"
-    height="70"
-/>
-</div>
+                <table class="sticker">
+
+                    <tr>
+
+                        <td class="logo-cell">
+
+                            @if($item->company?->logo)
+                                <img
+                                    src="data:image/png;base64,{{ base64_encode(Storage::disk('public')->get($item->company->logo)) }}"
+                                    alt="Logo"
+                                >
+                            @endif
+
+                        </td>
+
+                        <td class="info-cell">
+
+                            <div class="item-name">
+                                {{ Str::limit($item->name, 40) }}
+                            </div>
+
+                            <div class="item-code">
+                                Kode: {{ $item->code }}
+                            </div>
+
+                        </td>
+
+                        <td class="qr-cell">
+
+                            <img
+                                src="{{ $item->qr_image }}"
+                                alt="QR Code"
+                            >
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="3" class="company">
+                            {{ $item->company->company_name }}
+                        </td>
+
+                    </tr>
+
+                </table>
+
             </td>
 
-            <td width="78%" valign="top" halign="left">
-                <div class="item-name">
-                    {{ $item->name }}
-                </div>
+            @endforeach
 
-                <div class="item-code"  halign="left">
-                    {{ $item->code }}
-                </div>
+            @if($row->count() == 1)
+                <td width="50%"></td>
+            @endif
 
-                {{-- <div class="item-location">
-                    {{ $item->location }}
-                </div> --}}
-            </td>
         </tr>
+
+        @endforeach
+
     </table>
-</div>
-{{-- <div class="sticker">
-
-<div class="qr">
-   @php
-$svg = QrCode::size(100)
-    ->margin(1)
-    ->generate($item->qr_code);
-
-$svg = str_replace("\n", '', $svg);
-
-$dataUri = 'data:image/svg+xml;base64,' . base64_encode($svg);
-@endphp
-
-<img
-    src="{{ $dataUri }}"
-    width="70"
-    height="70"
-/>
-</div> --}}
-
-    <div class="content">
-
-        <div class="item-name">
-            {{ $item->name }}
-        </div>
-
-        <div class="item-code">
-            {{ $item->code }}
-        </div>
-
-        <div class="item-location">
-            {{ $item->location?->name }}
-        </div>
-
-    </div>
 
 </div>
 
-@endforeach
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-</div>
+<script>
+function downloadPNG(){
+
+    const sheet = document.getElementById('sheet');
+
+    html2canvas(sheet, {
+        scale: 4,
+        useCORS: true,
+        backgroundColor: '#ffffff'
+    }).then(function(canvas){
+
+        const link = document.createElement('a');
+
+        link.download = 'stiker-inventaris.png';
+
+        link.href = canvas.toDataURL('image/png');
+
+        link.click();
+
+    });
+
+}
+</script>
+
+@if($autoDownload)
+<script>
+window.addEventListener('load', function () {
+    downloadPNG();
+});
+</script>
+@endif
 
 </body>
 </html>

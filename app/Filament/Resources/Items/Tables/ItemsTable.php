@@ -239,18 +239,19 @@ class ItemsTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
-                    BulkAction::make('printSticker')
-                        ->label('Cetak Stiker')
-                        ->icon('heroicon-o-printer')
+                    BulkAction::make('downloadSticker')
+                        ->label('Download Stiker PNG')
+                        ->icon('heroicon-o-arrow-down-tray')
                         ->color('success')
                         ->action(function ($records) {
 
                             $ids = $records->pluck('id');
 
                             return redirect()->route(
-                                'items.print-sticker',
+                                'items.sticker',
                                 [
                                     'ids' => $ids->implode(','),
+                                    'download' => 1,
                                 ]
                             );
                         }),

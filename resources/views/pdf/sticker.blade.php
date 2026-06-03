@@ -5,13 +5,13 @@
 
 <style>
 @page{
-    margin: 5mm;
+    margin:5mm;
 }
 
 body{
     margin:0;
     padding:0;
-    font-family: Arial, sans-serif;
+    font-family:Arial, sans-serif;
     font-size:9pt;
     background:#fff;
 }
@@ -23,6 +23,15 @@ body{
     padding:5mm;
     box-sizing:border-box;
     margin:auto;
+}
+
+.page{
+    page-break-after:always;
+    margin-bottom:10mm;
+}
+
+.page:last-child{
+    page-break-after:auto;
 }
 
 .sticker{
@@ -59,12 +68,12 @@ body{
 }
 
 .qr-cell img{
-    width:15mm;
-    height:15mm;
+    width:20mm;
+    height:20mm;
 }
 
 .item-name{
-    font-size: 10pt;
+    font-size:10pt;
     font-weight:bold;
     line-height:1.2;
     padding-top:2mm;
@@ -91,11 +100,13 @@ body{
 </head>
 <body>
 
-<div class="sheet" id="sheet">
+@foreach($items->chunk(16) as $page)
+
+<div class="sheet page">
 
     <table width="100%" cellspacing="2" cellpadding="0">
 
-        @foreach($items->chunk(2) as $row)
+        @foreach($page->chunk(2) as $row)
 
         <tr>
 
@@ -167,29 +178,33 @@ body{
 
 </div>
 
+@endforeach
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <script>
-function downloadPNG(){
+async function downloadPNG(){
 
-    const sheet = document.getElementById('sheet');
+    const pages = document.querySelectorAll('.page');
 
-    html2canvas(sheet, {
-        scale: 4,
-        useCORS: true,
-        backgroundColor: '#ffffff'
-    }).then(function(canvas){
+    for(let i = 0; i < pages.length; i++){
+
+        const canvas = await html2canvas(pages[i],{
+            scale:4,
+            useCORS:true,
+            backgroundColor:'#ffffff'
+        });
 
         const link = document.createElement('a');
 
-        link.download = 'stiker-inventaris.png';
+        link.download = 'stiker-page-' + (i + 1) + '.png';
 
         link.href = canvas.toDataURL('image/png');
 
         link.click();
 
-    });
-
+        await new Promise(resolve => setTimeout(resolve, 500));
+    }
 }
 </script>
 

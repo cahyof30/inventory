@@ -33,24 +33,34 @@ class Item extends Model
         'specifications' => 'array',
     ];
 
+    public function getQrUrlAttribute(): string
+    {
+        return url('/scan/'.$this->code);
+    }
+
     public function generateQr(): void
     {
-        if ($this->code && $this->brand && $this->name) {
-            $this->qr_code = implode("\n", [
-                $this->code,
-                $this->brand,
-                $this->name,
-            ]);
+        if ($this->code) {
+            $this->qr_code = config('app.url')
+                .'/scan/'
+                .urlencode($this->code);
         }
+        // if ($this->code && $this->brand && $this->name) {
+        //     $this->qr_code = implode("\n", [
+        //         $this->code,
+        //         $this->brand,
+        //         $this->name,
+        //     ]);
+        // }
     }
 
-    public function getBarcodeBase64Attribute()
-    {
-        $dns = new DNS1D;
-        $dns->setStorPath(storage_path('framework/barcode/'));
+    // public function getBarcodeBase64Attribute()
+    // {
+    //     $dns = new DNS1D;
+    //     $dns->setStorPath(storage_path('framework/barcode/'));
 
-        return $dns->getBarcodePNG($this->code, 'C128');
-    }
+    //     return $dns->getBarcodePNG($this->code, 'C128');
+    // }
 
     protected static function booted(): void
     {
@@ -79,6 +89,7 @@ class Item extends Model
     {
         return $this->belongsTo(ItemCategory::class);
     }
+
     public function location()
     {
         return $this->belongsTo(Location::class);

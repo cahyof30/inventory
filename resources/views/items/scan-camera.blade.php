@@ -69,31 +69,59 @@
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <script>
-
-function onScanSuccess(decodedText){
-    window.location.href = decodedText;
-}
-
-function onScanFailure(error){
-    // kosong saja
-}
+let isProcessing = false;
 
 const html5QrCode = new Html5Qrcode("reader");
 
+async function onScanSuccess(decodedText) {
+
+    if (isProcessing) {
+        return;
+    }
+
+    isProcessing = true;
+
+    document.querySelector('.title').innerHTML =
+        'QR terdeteksi, membuka data aset...';
+
+    try {
+
+        await html5QrCode.stop();
+
+        setTimeout(() => {
+            window.location.href = decodedText;
+        }, 300);
+
+    } catch (error) {
+
+        window.location.href = decodedText;
+    }
+}
+
+function onScanFailure(error) {
+    // Biarkan kosong
+}
+
 html5QrCode.start(
-    { facingMode: "environment" },
+    {
+        facingMode: "environment"
+    },
     {
         fps: 10,
-        qrbox: 250
+        qrbox: {
+            width: 250,
+            height: 250
+        }
     },
     onScanSuccess,
     onScanFailure
-)
-.catch(err => {
-    console.error(err);
-    alert(err);
-});
+).catch(error => {
 
+    console.error(error);
+
+    alert("Gagal mengakses kamera: " + error);
+
+});
 </script>
 
 </body>

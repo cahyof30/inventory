@@ -10,6 +10,11 @@
          font-family: Arial, sans-serif;
     margin: 0;
     min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     background: #f8f9fa;
         }
 .card-wrapper {

@@ -73,8 +73,8 @@ const html5QrCode = new Html5Qrcode("reader");
 
 async function onScanSuccess(decodedText) {
 
-        console.log('QR Content:', decodedText);
-    alert(decodedText);
+    //     console.log('QR Content:', decodedText);
+    // alert(decodedText);
     if (isProcessing) {
         return;
     }

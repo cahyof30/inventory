@@ -81,8 +81,25 @@ async function onScanSuccess(decodedText) {
 
     isProcessing = true;
 
-    document.querySelector('.title').innerHTML =
-        'QR terdeteksi, membuka data aset...';
+    document.querySelector('.title').innerHTML = `
+    <div class="text-center">
+        <div class="mb-3">
+            <span style="font-size:48px;">✅</span>
+        </div>
+
+        <div class="fw-bold text-success fs-5">
+            QR Berhasil Terdeteksi
+        </div>
+
+        <div class="mt-2 text-muted">
+            Mengambil informasi aset...
+        </div>
+
+        <div class="spinner-border text-success mt-3" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+`;
 
     try {
 

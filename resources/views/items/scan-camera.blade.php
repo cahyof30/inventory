@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Scan QR</title>
 </head>
-<body>
 
       <style>
         body{
@@ -46,8 +45,6 @@
     </style>
 
     	    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-
-</head>
 <body>
 <div class="card-wrapper">
 <div class="card" style="display: flex; flex-direction: column;justify-content: center; align-items: center !important;">
@@ -79,36 +76,11 @@ async function onScanSuccess(decodedText) {
         return;
     }
 
-    if (!isValidQrUrl(decodedText)) {
-
-        document.querySelector('.title').innerHTML = `
-            <div class="text-center">
-
-                <div style="font-size:64px;">
-                    ⚠️
-                </div>
-
-                <div class="fw-bold text-danger">
-                    QR Tidak Valid
-                </div>
-
-                <div class="text-muted mt-2">
-                    QR ini bukan berasal dari
-                    sistem inventaris SGM.
-                </div>
-
-            </div>
-        `;
-
-        return;
-    }
-
     isProcessing = true;
 
     await html5QrCode.stop();
 
-    document.getElementById('reader')
-        .style.display = 'none';
+    document.getElementById('reader').style.display = 'none';
 
     document.querySelector('.title').innerHTML = `
         <div class="text-center">
@@ -118,7 +90,7 @@ async function onScanSuccess(decodedText) {
             </div>
 
             <div class="fw-bold text-success">
-                Aset Ditemukan
+                QR Berhasil Terdeteksi
             </div>
 
             <div class="text-muted">

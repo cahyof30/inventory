@@ -6,12 +6,21 @@
 
     <style>
         body{
-            font-family:Arial,sans-serif;
-            max-width:700px;
-            margin:30px auto;
-            padding:20px;
-        }
+         font-family: Arial, sans-serif;
+    margin: 0;
+    min-height: 100vh;
 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #f8f9fa;
+        }
+.card-wrapper {
+            width: 100%;
+            max-width: 600px; 
+            padding: 20px;
+        }
         .card{
             border:1px solid #ddd;
             padding:20px;
@@ -32,10 +41,13 @@
             padding:8px;
         }
     </style>
+
+    	    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
 </head>
 <body>
-
-<div class="card">
+<div class="card-wrapper">
+<div class="card" style="display: flex; flex-direction: column;justify-content: center; align-items: center !important;">
 
    <div class="title" style="display: flex; justify-content: center; align-items: center;">
     <img src="{{ asset('storage/'.$item->company?->logo) }}" alt="Logo" style="height:200px; vertical-align:middle;">
@@ -66,6 +78,13 @@
             <td>{{ $item->location?->name }}</td>
         </tr>
         <tr>
+            <td>Status</td>
+            <td>
+
+<small class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-success-emphasis bg-success-subtle border border-success-subtle rounded-2">Verified</small>
+</td>
+        </tr>
+        <tr>
             <td colspan="2">
             <a href="{{ route('items.scan-camera') }}"
            style="
@@ -85,13 +104,15 @@
 	</g>
 </svg>
 
- &nbsp;Scan QR</a>
+ &nbsp;Scan QR Lain</a>
             </td>
         </tr>
 
     </table>
 
 </div>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
 </body>
 </html>

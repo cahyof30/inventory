@@ -42,16 +42,16 @@ class Item extends Model
     {
         if ($this->code) {
             $this->qr_code = config('app.url')
+                .'/inventory/public'
                 .'/scan/'
                 .urlencode($this->code);
         }
-        // if ($this->code && $this->brand && $this->name) {
-        //     $this->qr_code = implode("\n", [
-        //         $this->code,
-        //         $this->brand,
-        //         $this->name,
-        //     ]);
+        // if ($this->code) {
+        //     $this->qr_code = config('app.url')
+        //         .'/scan/'
+        //         .urlencode($this->code);
         // }
+       
     }
 
     // public function getBarcodeBase64Attribute()

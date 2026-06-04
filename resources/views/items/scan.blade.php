@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Informasi Aset</title>
 
     <style>
@@ -9,11 +10,6 @@
          font-family: Arial, sans-serif;
     margin: 0;
     min-height: 100vh;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
     background: #f8f9fa;
         }
 .card-wrapper {

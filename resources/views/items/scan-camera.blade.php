@@ -77,6 +77,30 @@ async function onScanSuccess(decodedText) {
         return;
     }
 
+    // Validasi QR terlebih dahulu
+    if (!isValidQrUrl(decodedText)) {
+
+        document.querySelector('.title').innerHTML = `
+            <div class="text-center">
+
+                <div style="font-size:64px;">
+                    ⚠️
+                </div>
+
+                <div class="fw-bold text-danger">
+                    QR Tidak Valid
+                </div>
+
+                <div class="text-muted mt-2">
+                    QR ini bukan berasal dari sistem inventaris SGM.
+                </div>
+
+            </div>
+        `;
+
+        return;
+    }
+
     isProcessing = true;
 
     await html5QrCode.stop();
@@ -108,6 +132,24 @@ async function onScanSuccess(decodedText) {
 
 function onScanFailure(error) {
     // Biarkan kosong
+}
+
+function isValidQrUrl(url) {
+
+    try {
+
+        const parsed = new URL(url);
+
+        return (
+            parsed.protocol === 'https:' &&
+            parsed.hostname === window.location.hostname &&
+            parsed.pathname.startsWith('/asset/')
+        );
+
+    } catch {
+
+        return false;
+    }
 }
 
 html5QrCode.start(

@@ -81,12 +81,20 @@ async function onScanSuccess(decodedText) {
 
     if (!isValidQrUrl(decodedText)) {
 
-        showError(
-            'QR ini bukan berasal dari sistem inventaris SGM Group.'
-        );
-
-        return;
+    try {
+        await html5QrCode.stop();
+    } catch (e) {
+        console.error(e);
     }
+
+    document.getElementById('reader').style.display = 'none';
+
+    showError(
+        'QR ini bukan berasal dari sistem inventaris SGM Group.'
+    );
+
+    return;
+}
 
     isProcessing = true;
 
@@ -187,9 +195,9 @@ function showError(message) {
     document.getElementById('status-area').innerHTML = `
         <div class="text-center">
 
-            <div style="font-size:64px;">⚠️</div>
+            <div style="font-size:72px;">❌</div>
 
-            <div class="fw-bold text-danger fs-5">
+            <div class="fw-bold text-danger fs-4">
                 QR Tidak Valid
             </div>
 
@@ -198,15 +206,16 @@ function showError(message) {
             </div>
 
             <button
-                class="btn btn-primary mt-3"
-                onclick="window.location.reload()"
+                class="btn btn-primary mt-4"
+                onclick="restartScanner()"
             >
-                Scan QR Lagi
+                📷 Scan QR Lagi
             </button>
 
         </div>
     `;
 }
+
 
 </script>
 

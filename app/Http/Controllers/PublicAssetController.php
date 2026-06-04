@@ -22,7 +22,7 @@ class PublicAssetController extends Controller
     }
 
     return view(
-        'public.asset-detail',
+        'public.scan-camera',
         compact('item')
     );
 }

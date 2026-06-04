@@ -11,9 +11,48 @@
         tidak tersedia atau telah dihapus.
     </p>
 
-    <a href="{{ route('items.scan-camera') }}"
-       class="btn btn-primary">
-       Scan QR Lagi
-    </a>
+  <button
+    class="btn btn-primary mt-3"
+    onclick="restartScanner()"
+>
+    Scan QR Lagi
+</button>
 
+    <script>
+        async function restartScanner() {
+
+    document.getElementById('reader').style.display = 'block';
+
+    document.getElementById('status-area').innerHTML = `
+        <div class="title">
+            Scan QR Asset
+        </div>
+    `;
+
+    isProcessing = false;
+
+    try {
+
+        await html5QrCode.start(
+            {
+                facingMode: "environment"
+            },
+            {
+                fps: 10,
+                qrbox: {
+                    width: 250,
+                    height: 250
+                }
+            },
+            onScanSuccess,
+            onScanFailure
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+}
+        </script>
 </div>

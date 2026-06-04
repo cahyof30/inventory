@@ -73,6 +73,8 @@ const html5QrCode = new Html5Qrcode("reader");
 
 async function onScanSuccess(decodedText) {
 
+        console.log('QR Content:', decodedText);
+    alert(decodedText);
     if (isProcessing) {
         return;
     }
@@ -143,7 +145,7 @@ function isValidQrUrl(url) {
         return (
             parsed.protocol === 'https:' &&
             parsed.hostname === window.location.hostname &&
-            parsed.pathname.startsWith('/asset/')
+            parsed.pathname.startsWith('/scan/')
         );
 
     } catch {

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\PublicAssetController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -34,11 +35,14 @@ Route::get(
     [PdfController::class, 'previewSticker']
 )->name('items.sticker');
 
-Route::get('/scan/{code}', [ItemController::class, 'scan'])
+Route::get('/scan/{uuid}', [ItemController::class, 'scan'])
     ->name('items.scan');
 Route::get('/scannew/{code}', [ItemController::class, 'scannew'])
     ->name('items.scannew');
-
+Route::get(
+    '/asset/{uuid}',
+    [PublicAssetController::class, 'show']
+)->name('asset.public');
     Route::get('/scan-camera', function () {
     return view('items.scan-camera');
 })->name('items.scan-camera');

@@ -79,40 +79,58 @@ async function onScanSuccess(decodedText) {
         return;
     }
 
+    if (!isValidQrUrl(decodedText)) {
+
+        document.querySelector('.title').innerHTML = `
+            <div class="text-center">
+
+                <div style="font-size:64px;">
+                    ⚠️
+                </div>
+
+                <div class="fw-bold text-danger">
+                    QR Tidak Valid
+                </div>
+
+                <div class="text-muted mt-2">
+                    QR ini bukan berasal dari
+                    sistem inventaris SGM.
+                </div>
+
+            </div>
+        `;
+
+        return;
+    }
+
     isProcessing = true;
 
+    await html5QrCode.stop();
+
+    document.getElementById('reader')
+        .style.display = 'none';
+
     document.querySelector('.title').innerHTML = `
-    <div class="text-center">
-        <div class="mb-3">
-            <span style="font-size:48px;">✅</span>
+        <div class="text-center">
+
+            <div style="font-size:64px;">
+                📦
+            </div>
+
+            <div class="fw-bold text-success">
+                Aset Ditemukan
+            </div>
+
+            <div class="text-muted">
+                Membuka informasi aset...
+            </div>
+
         </div>
+    `;
 
-        <div class="fw-bold text-success fs-5">
-            QR Berhasil Terdeteksi
-        </div>
-
-        <div class="mt-2 text-muted">
-            Mengambil informasi aset...
-        </div>
-
-        <div class="spinner-border text-success mt-3" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-    </div>
-`;
-
-    try {
-
-        await html5QrCode.stop();
-
-        setTimeout(() => {
-            window.location.href = decodedText;
-        }, 300);
-
-    } catch (error) {
-
+    setTimeout(() => {
         window.location.href = decodedText;
-    }
+    }, 500);
 }
 
 function onScanFailure(error) {

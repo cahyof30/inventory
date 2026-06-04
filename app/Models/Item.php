@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\Traits\HasInventoryCode;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Milon\Barcode\DNS1D;
+use Illuminate\Support\Str;
 
 class Item extends Model
 {
@@ -51,7 +51,7 @@ class Item extends Model
         //         .'/scan/'
         //         .urlencode($this->code);
         // }
-       
+
     }
 
     // public function getBarcodeBase64Attribute()
@@ -66,9 +66,18 @@ class Item extends Model
     {
         static::creating(function (Item $item) {
             // 1. Generate atau Update Kode Inventaris jika ada perubahan input
-            // Kita gunakan !exists untuk data baru, isDirty untuk perubahan data lama
-            if (! $item->exists || $item->isDirty(['company_id', 'category_id', 'purchase_date'])) {
                 $item->generateInventoryCode();
+            // Generate UUID publik
+            if (empty($item->public_uuid)) {
+                $item->public_uuid = Str::uuid();
+            }
+
+            // Isi QR
+            if ($item->public_uuid) {
+                $item->qr_code = route(
+                    'asset.public',
+                    $item->public_uuid
+                );
             }
 
             // 2. Isi qr_code hanya dengan string kode saja
@@ -76,6 +85,18 @@ class Item extends Model
                 $item->qr_code = $item->code;
             }
         });
+
+         static::updating(function (Item $item) {
+
+        if ($item->isDirty([
+            'company_id',
+            'category_id',
+            'purchase_date'
+        ])) {
+
+            $item->generateInventoryCode();
+        }
+    });
         //     static::creating(function (Item $item) {
         //         $item->generateQr();
         //     });

@@ -12,6 +12,7 @@ class Item extends Model
     use HasFactory, HasInventoryCode;
 
     protected $fillable = [
+        'public_uuid',
         'code',
         'company_id',
         'category_id',

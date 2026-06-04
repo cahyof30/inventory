@@ -51,7 +51,7 @@
 <div class="card" style="display: flex; flex-direction: column;justify-content: center; align-items: center !important;">
 
    <div class="title" style="display: flex; justify-content: center; align-items: center;">
-    <img src="{{ asset('storage/'.$item->company?->logo) }}" alt="Logo" style="height:200px; vertical-align:middle;">
+   <div id="reader" style="width:500px"></div>
 </div>
     <div class="title">
      Scan QR Asset
@@ -62,7 +62,7 @@
 
 
 
-<div id="reader" style="width:500px"></div>
+
 
 <script src="https://unpkg.com/html5-qrcode"></script>
 

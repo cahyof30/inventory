@@ -1,4 +1,6 @@
-    <script>
+   
+<div class="container text-center mt-5">
+ <script>
         async function restartScanner() {
 
     document.getElementById('reader').style.display = 'block';
@@ -35,8 +37,6 @@
     }
 }
         </script>
-<div class="container text-center mt-5">
-
     <div style="font-size:80px">
         ❌
     </div>

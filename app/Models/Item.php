@@ -41,17 +41,17 @@ class Item extends Model
 
     public function generateQr(): void
     {
-        if ($this->code) {
-            $this->qr_code = config('app.url')
-                .'/inventory/public'
-                .'/scan/'
-                .urlencode($this->code);
-        }
         // if ($this->code) {
         //     $this->qr_code = config('app.url')
+        //         .'/inventory/public'
         //         .'/scan/'
         //         .urlencode($this->code);
         // }
+        if ($this->code) {
+            $this->qr_code = config('app.url')
+                .'/scan/'
+                .urlencode($this->public_uuid);
+        }
 
     }
 
@@ -75,9 +75,10 @@ class Item extends Model
             }
 
             // 2. Isi qr_code hanya dengan string kode saja
-            if ($item->code) {
-                $item->qr_code = $item->code;
-            }
+            // if ($item->code) {
+            //     $item->qr_code = $item->code;
+            // }
+            $item->generateQr();
         });
 
          static::updating(function (Item $item) {

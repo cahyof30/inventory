@@ -55,13 +55,6 @@ class Item extends Model
 
     }
 
-    // public function getBarcodeBase64Attribute()
-    // {
-    //     $dns = new DNS1D;
-    //     $dns->setStorPath(storage_path('framework/barcode/'));
-
-    //     return $dns->getBarcodePNG($this->code, 'C128');
-    // }
 
     protected static function booted(): void
     {

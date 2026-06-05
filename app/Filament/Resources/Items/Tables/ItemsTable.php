@@ -199,6 +199,11 @@ class ItemsTable
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('success')
                     ->button(),
+                Action::make('scan_qr')
+                    ->label('Scan QR')
+                    ->icon('heroicon-o-qr-code')
+                    ->color('success')
+                    ->url(route('items.scan-camera')),
             ])
             ->filters([
                 //

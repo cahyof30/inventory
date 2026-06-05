@@ -2,7 +2,7 @@
     <div class="flex flex-col items-center gap-4">
 
         <a
-            href="{{ route('asset.scan') }}"
+            href="{{ route('items.scan-camera') }}"
             class="w-full max-w-md"
         >
             <x-filament::button

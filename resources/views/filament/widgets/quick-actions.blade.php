@@ -1,30 +1,46 @@
-<x-filament-widgets::widget>
-    <x-filament::section>
+<x-filament::section>
+    <div class="flex flex-col items-center gap-4">
 
-        <div class="grid gap-4 md:grid-cols-3">
-
-            <a
-                href="{{ route('items.scan-camera') }}"
-                class="fi-btn fi-btn-color-primary"
+        <a
+            href="{{ route('asset.scan') }}"
+            class="w-full max-w-md"
+        >
+            <x-filament::button
+                icon="heroicon-o-qr-code"
+                size="xl"
+                class="w-full !justify-center py-5"
             >
-                📷 Scan QR Asset
-            </a>
+                Scan QR Asset
+            </x-filament::button>
+        </a>
 
-            <a
-                href="{{ route('filament.admin.resources.items.create') }}"
-                class="fi-btn fi-btn-color-gray"
+        <a
+            href="{{ route('filament.admin.resources.items.create') }}"
+            class="w-full max-w-md"
+        >
+            <x-filament::button
+                icon="heroicon-o-plus"
+                color="primary"
+                size="xl"
+                class="w-full !justify-center py-5"
             >
-                ➕ Tambah Aset
-            </a>
+                Tambah Asset
+            </x-filament::button>
+        </a>
 
-            <a
-                href="{{ route('filament.admin.resources.items.index') }}"
-                class="fi-btn fi-btn-color-gray"
+        <a
+            href="{{ route('filament.admin.resources.items.index') }}"
+            class="w-full max-w-md"
+        >
+            <x-filament::button
+                icon="heroicon-o-cube"
+                color="gray"
+                size="xl"
+                class="w-full !justify-center py-5"
             >
-                📦 Daftar Aset
-            </a>
+                Daftar Asset
+            </x-filament::button>
+        </a>
 
-        </div>
-
-    </x-filament::section>
-</x-filament-widgets::widget>
+    </div>
+</x-filament::section>

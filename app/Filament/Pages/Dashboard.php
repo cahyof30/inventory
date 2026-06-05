@@ -2,20 +2,29 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Widgets\QuickActions;
 use Filament\Pages\Dashboard as BaseDashboard;
+use Filament\Widgets\AccountWidget;
+use Filament\Widgets\FilamentInfoWidget;
 
 class Dashboard extends BaseDashboard
 {
-    public function getHeaderWidgetsColumns(): int|array
+    public function getHeaderWidgets(): array
     {
-        // return [
-        //     'default' => 1,
-        //     'md' => 2,
-        //     'xl' => 12,
-        // ];
-
-        return [
-        \App\Filament\Widgets\QuickActions::class,
-    ];
+        return [];  // kosongkan, atau isi widget yang mau di header
     }
+
+    public function getWidgets(): array
+    {
+        return [
+            // AccountWidget::class,
+            // FilamentInfoWidget::class,
+            QuickActions::class,
+        ];
+    }
+
+    // public function getColumns(): int|string|array
+    // {
+    //     return 1; // semua widget full width
+    // }
 }

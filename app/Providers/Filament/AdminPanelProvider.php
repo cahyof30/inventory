@@ -42,7 +42,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,
-                ItemConditionChart::class,
+                // ItemConditionChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,

@@ -8,10 +8,14 @@ class Dashboard extends BaseDashboard
 {
     public function getHeaderWidgetsColumns(): int|array
     {
+        // return [
+        //     'default' => 1,
+        //     'md' => 2,
+        //     'xl' => 12,
+        // ];
+
         return [
-            'default' => 1,
-            'md' => 2,
-            'xl' => 12,
-        ];
+        \App\Filament\Widgets\QuickActions::class,
+    ];
     }
 }

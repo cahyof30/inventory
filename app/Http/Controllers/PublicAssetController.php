@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\ItemScanLog;
 
 class PublicAssetController extends Controller
 {
@@ -20,6 +21,13 @@ class PublicAssetController extends Controller
             404
         );
     }
+
+     ItemScanLog::create([
+            'item_id' => $item->id,
+            'ip' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+            'scanned_at' => now(),
+        ]);
 
     return view(
         'items.scan-camera',

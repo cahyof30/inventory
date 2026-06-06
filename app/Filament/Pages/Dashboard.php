@@ -2,7 +2,9 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Widgets\DashboardStat;
 use App\Filament\Widgets\QuickActions;
+use App\Filament\Widgets\QuickButton;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
@@ -17,9 +19,8 @@ class Dashboard extends BaseDashboard
     public function getWidgets(): array
     {
         return [
-            // AccountWidget::class,
-            // FilamentInfoWidget::class,
-            QuickActions::class,
+             QuickButton::class,
+             DashboardStat::class,
         ];
     }
 

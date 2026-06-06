@@ -1,106 +1,8 @@
-{{-- <x-filament::section>
 
-    <div class="flex flex-col gap-4">
-
-        <a href="{{ route('items.scan-camera') }}"
-            class="group overflow-hidden rounded-2xl bg-[#0d6efd] text-white shadow-md transition-transform active:scale-[0.98]">
-
-            <div class="flex items-center gap-4 px-5 py-5">
-
-                <div
-                    class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white/20">
-
-                    <x-heroicon-o-qr-code class="h-9 w-9 text-white" />
-
-                </div>
-
-                <div class="min-w-0 flex-1">
-
-                    <h3 class="text-xl font-extrabold tracking-tight text-white">
-                        Scan QR Asset
-                    </h3>
-
-                    <p class="mt-0.5 text-sm font-medium text-white/75">
-                        Scan kode QR untuk melihat detail asset
-                    </p>
-
-                </div>
-
-                <x-heroicon-o-chevron-right
-                    class="h-6 w-6 shrink-0 text-white/80 transition-transform group-hover:translate-x-1" />
-
-            </div>
-
-        </a>
-
-        <a href="{{ route('filament.admin.resources.items.create') }}"
-            class="group overflow-hidden rounded-2xl bg-[#22c55e] text-white shadow-md transition-transform active:scale-[0.98]">
-
-            <div class="flex items-center gap-4 px-5 py-5">
-
-                <div
-                    class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white/20">
-
-                    <x-heroicon-o-plus class="h-9 w-9 text-white" />
-
-                </div>
-
-                <div class="min-w-0 flex-1">
-
-                    <h3 class="text-xl font-extrabold tracking-tight text-white">
-                        Tambah Asset
-                    </h3>
-
-                    <p class="mt-0.5 text-sm font-medium text-white/75">
-                        Tambah asset baru ke sistem
-                    </p>
-
-                </div>
-
-                <x-heroicon-o-chevron-right
-                    class="h-6 w-6 shrink-0 text-white/80 transition-transform group-hover:translate-x-1" />
-
-            </div>
-
-        </a>
-
-        <a href="{{ route('filament.admin.resources.items.index') }}"
-            class="group overflow-hidden rounded-2xl bg-[#7c3aed] text-white shadow-md transition-transform active:scale-[0.98]">
-
-            <div class="flex items-center gap-4 px-5 py-5">
-
-                <div
-                    class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white/20">
-
-                    <x-heroicon-o-cube class="h-9 w-9 text-white" />
-
-                </div>
-
-                <div class="min-w-0 flex-1">
-
-                    <h3 class="text-xl font-extrabold tracking-tight text-white">
-                        Daftar Asset
-                    </h3>
-
-                    <p class="mt-0.5 text-sm font-medium text-white/75">
-                        Lihat dan kelola semua asset
-                    </p>
-
-                </div>
-
-                <x-heroicon-o-chevron-right
-                    class="h-6 w-6 shrink-0 text-white/80 transition-transform group-hover:translate-x-1" />
-
-            </div>
-
-        </a>
-
-    </div>
-
-</x-filament::section> --}}
 <x-filament::section>
-        <div class="button-box container">
-          <button class="button">
+
+ <div class="desktop-layout">
+<button class="button"onclick="window.location.href='{{ route('items.scan-camera') }}'">
             <p class="title">Scan QR</p>
             <img
               src="{{ asset('assets/qr.png') }}"
@@ -111,7 +13,7 @@
           </button>
 
           <!-- Button 2 -->
-          <button class="button2">
+          <button class="button2"onclick="window.location.href='{{ route('filament.admin.resources.items.create') }}'">
             <p class="title">Tambah Asset</p>
 
             <img
@@ -123,37 +25,105 @@
           </button>
 
           <!-- Button 3 -->
-          <button class="button3">
+          <button class="button3"onclick="window.location.href='{{ route('filament.admin.resources.items.index') }}'">
             <p class="title">Daftar Asset</p>
             <img
-              src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Locked.png"
+             src="{{ asset('assets/list.png') }}"
               alt="Locked"
                 class="img-widget"
             />
-            <p class="description">Lihat dan kelola <br> semua asset</p>
+            <p class="description">Lihat dan kelola semua <br>  asset</p>
+          </button>
+
+</div>  
+
+<div class="mobile-layout">
+          <button class="button"onclick="window.location.href='{{ route('items.scan-camera') }}'">
+            <p class="title">Scan QR</p>
+            <img
+              src="{{ asset('assets/qr.png') }}"
+              alt="Handshake"
+              class="img-widget"
+            />
+            <p class="description">Scan untuk lihat detail<br />Asset</p>
+          </button>
+
+          <!-- Button 2 -->
+          <button class="button2"onclick="window.location.href='{{ route('filament.admin.resources.items.create') }}'">
+            <p class="title">Tambah Asset</p>
+
+            <img
+             src="{{ asset('assets/add.png') }}"
+              alt="Man"
+              class="img-widget"
+            />
+            <p class="description">Tambah asset baru <br>ke sistem</p>
+          </button>
+
+          <!-- Button 3 -->
+          <button class="button3"onclick="window.location.href='{{ route('filament.admin.resources.items.index') }}'">
+            <p class="title">Daftar Asset</p>
+            <img
+             src="{{ asset('assets/list.png') }}"
+              alt="Locked"
+                class="img-widget"
+            />
+            <p class="description">Lihat dan kelola semua <br>  asset</p>
           </button>
         </div>
-
     <style>
+
+      /* Desktop default */
+.desktop-layout {
+     display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:16px;
+    width:100%;
+}
+
+
+.mobile-layout {
+    display: none;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .desktop-layout {
+        display: none;
+    }
+
+    .mobile-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        width: 100%;
+    }
+
+}
         .main-box {
   height: 100vh;
   display: flex;
   margin: auto;
 }
 
+.button,
+.button2,
+.button3 {
+    width: 100%;
+    min-height: 100px;
+}
+
 .button-box {
-  height: 500px;
-  max-width: 500px;
-  align-items: center;
-  justify-content: center;
-  margin: auto;
-  display: grid;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 /* Button 1 */
 .button {
   height: 100px;
-  width: 500px;
   display: flex;
   border-radius: 2.5rem;
   transition: 0.5s;
@@ -199,8 +169,8 @@
 
 .title {
   font-weight: bold;
-  margin-top: 1.6rem;
-  margin-left: 10rem;
+  margin-top: 1.6rem;width: 100%; /* Memastikan text-align: center bekerja di seluruh lebar elemen */
+  text-align: center;
   transition: 0.5s;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
@@ -236,7 +206,6 @@
 /* Button 2 */
 .button2 {
   height: 100px;
-  width: 500px;
   display: flex;
   border-radius: 2.5rem;
   transition: 0.5s;
@@ -294,7 +263,6 @@
 /* Button 3 */
 .button3 {
   height: 100px;
-  width: 500px;
   display: flex;
   border-radius: 2.5rem;
   transition: 0.5s;

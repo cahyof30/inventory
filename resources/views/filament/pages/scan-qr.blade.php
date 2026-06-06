@@ -4,9 +4,6 @@
 
         <div id="reader" style="max-width:600px;margin:auto"></div>
 
-        <div id="status-area" class="text-center mt-4">
-            <h2>Scan QR Asset</h2>
-        </div>
 
     </x-filament::section>
 

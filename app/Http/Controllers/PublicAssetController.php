@@ -30,7 +30,8 @@ class PublicAssetController extends Controller
         ]);
 
     return view(
-        'items.scan-camera',
+        // 'items.scan-camera',
+        'filament.pages.scan-qr',
         compact('item')
     );
 }

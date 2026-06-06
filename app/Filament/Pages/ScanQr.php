@@ -20,9 +20,9 @@ class ScanQr extends Page
     protected static ?string $navigationLabel = 'Scan QR Asset';
     protected static ?int $navigationSort = 1;
     protected string $view = 'filament.pages.scan-qr';
-    public function mount()
-    {
-        redirect()->route('items.scan-camera');
-    }
+    // public function mount()
+    // {
+    //     redirect()->route('items.scan-camera');
+    // }
 
 }

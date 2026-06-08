@@ -16,7 +16,7 @@ class QuickButton extends Widget
                 [
                     'label' => 'Scan QR Code',
                     'icon' => 'heroicon-m-qr-code',
-                    'url' => route('items.scan-camera'),
+                    'url' => \App\Filament\Pages\ScanQr::getUrl(),
                     'color' => 'primary',
                 ],
                 [

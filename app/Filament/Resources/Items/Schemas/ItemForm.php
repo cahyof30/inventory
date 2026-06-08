@@ -69,8 +69,8 @@ class ItemForm
                 FileUpload::make('image')
                     ->label('Gambar Barang')
                     ->image()
+                    ->disk('public')
                     ->directory('items'),
-
                 // Textarea::make('qr_code')
                 //     ->label('QR Code Content')
                 //     ->rows(3)

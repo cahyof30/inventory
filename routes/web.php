@@ -1,5 +1,6 @@
 <?php
 
+use App\Filament\Pages\AssetDetail;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PublicAssetController;
@@ -46,3 +47,8 @@ Route::get(
     Route::get('/scan-camera', function () {
     return view('items.scan-camera');
 })->name('items.scan-camera');
+
+Route::get(
+    '/admin/asset/{uuid}',
+    AssetDetail::class
+)->name('asset.detail');

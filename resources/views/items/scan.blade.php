@@ -51,7 +51,10 @@
 <div class="card" style="display: flex; flex-direction: column;justify-content: center; align-items: center !important;">
 
    <div class="title" style="display: flex; justify-content: center; align-items: center;">
-    <img src="{{ asset('storage/'.$item->company?->logo) }}" alt="Logo" style="height:200px; vertical-align:middle;">
+    <img src="{{ asset('storage/'.$item->company?->logo) }}" alt="Logo" style="height:100px; vertical-align:middle;">
+</div>
+   <div class="title" style="display: flex; justify-content: center; align-items: center;">
+    <img src="{{ $item->image ? asset('storage/'.$item->image) : asset('assets/no_picture.png') }}" alt="Logo" style="height:300px; vertical-align:middle;">
 </div>
     <div class="title">
         Informasi Aset SGM Group
@@ -85,6 +88,83 @@
 <small class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-success-emphasis bg-success-subtle border border-success-subtle rounded-2">Verified</small>
 </td>
         </tr>
+@if(auth()->check())
+
+<tr>
+    <td colspan="2">
+
+        <button
+            class="btn btn-outline-dark w-100"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#confidentialInfo"
+            aria-expanded="false"
+            aria-controls="confidentialInfo"
+        >
+            🔒 Lihat Informasi Lengkap (Harus Login)
+        </button>
+
+        <div class="collapse mt-3" id="confidentialInfo">
+
+            <div class="card card-body">
+
+                <table class="table table-sm mb-0">
+
+                    <tr>
+                        <td width="180"><strong>Harga Beli</strong></td>
+                        <td>
+                            Rp {{ number_format($item->purchase_price, 0, ',', '.') }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Tanggal Beli</strong></td>
+                        <td>
+                            {{ \Carbon\Carbon::parse($item->purchase_date)->format('d F Y') }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Vendor</strong></td>
+                        <td>
+                            {{ $item->vendor?->name ?? '-' }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Merek</strong></td>
+                        <td>
+                            {{ $item->brand ?? '-' }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Kondisi</strong></td>
+                        <td>
+                            {{ ucfirst($item->condition) }}
+                        </td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </td>
+</tr>
+
+@else
+
+ <button
+            class="btn btn-outline-secondary w-100"
+            type="button"
+        >
+            🔒 Lihat Informasi Lengkap (Harus Login)
+        </button>
+@endif
+
+
         <tr>
          <td colspan="2">
     <div style="display: flex; gap: 10px; width: 100%; box-sizing: border-box;">

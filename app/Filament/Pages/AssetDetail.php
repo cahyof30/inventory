@@ -22,11 +22,12 @@ class AssetDetail extends Page
 
      public function mount(string $uuid): void
     {
-        $this->item = Item::with([
-            'company',
-            'location',
-        ])
-        ->where('public_uuid', $uuid)
-        ->firstOrFail();
+        dd($uuid);
+        // $this->item = Item::with([
+        //     'company',
+        //     'location',
+        // ])
+        // ->where('public_uuid', $uuid)
+        // ->firstOrFail();
     }
 }

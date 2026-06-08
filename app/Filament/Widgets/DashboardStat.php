@@ -13,7 +13,7 @@ class DashboardStat extends StatsOverviewWidget
             Stat::make('Total Asset', 1234)
                 ->description('Seluruh asset terdaftar')
                 ->descriptionIcon('heroicon-m-cube')
-                ->color('primary')
+                ->color('info')
                 ->chart([7, 5, 10, 8, 12, 15, 20]),
 
             Stat::make('Total Pengguna', 45)

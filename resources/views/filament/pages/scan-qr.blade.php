@@ -3,13 +3,10 @@
     <x-filament::section>
 
         <div id="reader" style="max-width:600px;margin:auto"></div>
+ 
+        <div id="status-area" class="mt-4"></div>
 
-
-    </x-filament::section>
-
-</x-filament-panels::page>
-
-    <script src="https://unpkg.com/html5-qrcode"></script>
+         <script src="https://unpkg.com/html5-qrcode"></script>
 
 <script>
 let isProcessing = false;
@@ -197,3 +194,9 @@ async function restartScanner() {
 }
 
 </script>
+
+    </x-filament::section>
+
+</x-filament-panels::page>
+
+   

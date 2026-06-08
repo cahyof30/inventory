@@ -6,7 +6,12 @@
  
         <div id="status-area" class="mt-4"></div>
 
-         <script src="https://unpkg.com/html5-qrcode"></script>
+         
+
+    </x-filament::section>
+
+    @push('scripts')
+    <script src="https://unpkg.com/html5-qrcode"></script>
 
 <script>
 let isProcessing = false;
@@ -194,8 +199,8 @@ async function restartScanner() {
 }
 
 </script>
-
-    </x-filament::section>
+        
+    @endpush
 
 </x-filament-panels::page>
 

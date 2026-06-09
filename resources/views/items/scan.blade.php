@@ -176,7 +176,8 @@
 
 <tr>
     <td colspan="2">
- <a href="{{ url('/admin/login') }}"
+ <a href="{{ route('filament.admin.auth.login') }}"
+   onclick="event.preventDefault(); window.location.href=this.href;"
             class="btn btn-outline-secondary w-100"
             type="button"
         >

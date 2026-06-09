@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Companies\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -14,12 +15,21 @@ class CompaniesTable
     {
         return $table
             ->columns([
-               TextColumn::make('slug')
+                TextColumn::make('slug')
                     ->label('Singkatan')
                     ->searchable(),
-               TextColumn::make('company_name')
+                TextColumn::make('company_name')
                     ->label('Nama Perusahaan')
                     ->searchable(),
+                ImageColumn::make('logo')
+                    ->label('Logo')
+                    ->circular()
+    // Hapus ->directory(...)
+    // Cukup gunakan closure atau modifikasi langsung path jika nama filenya tersimpan relatif
+                    ->disk('public'), // Opsional jika default disk Anda sudah public
+                // ->square(false),
+                // ->size(40)
+                // ->extraImgAttributes(['class' => 'object-cover']),
             ])
             ->filters([
                 //

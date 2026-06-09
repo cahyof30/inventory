@@ -58,11 +58,6 @@ class ItemsTable
                     ->label('Purchase Price')
                     ->money('IDR', locale: 'id')
                     ->sortable(),
-                // TextColumn::make('purchase_date')
-                //     ->date()
-                //     ->sortable(),
-                // TextColumn::make('condition')
-                //     ->searchable(),
                 ImageColumn::make('image'),
                 TextColumn::make('created_at')
                     ->dateTime()

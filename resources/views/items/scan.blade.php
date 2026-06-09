@@ -41,6 +41,16 @@
         td{
             padding:8px;
         }
+
+        /* Berikan efek transisi pada SVG di dalam tombol */
+.btn[data-bs-toggle="collapse"] svg {
+    transition: transform 0.3s ease;
+}
+
+/* Ketika tombol diklik (aria-expanded="true"), putar SVG 180 derajat */
+.btn[data-bs-toggle="collapse"][aria-expanded="true"] svg {
+    transform: rotate(180deg);
+}
     </style>
 
     	    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
@@ -93,22 +103,25 @@
 <tr>
     <td colspan="2">
 
-        <button
-            class="btn btn-outline-dark w-100"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#confidentialInfo"
-            aria-expanded="false"
-            aria-controls="confidentialInfo"
-        >
-            🔒 Lihat Informasi Lengkap (Harus Login)
-        </button>
-
+      <button
+    class="btn btn-outline-dark w-100 d-flex align-items-center justify-content-center gap-2"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#confidentialInfo"
+    aria-expanded="false"
+    aria-controls="confidentialInfo"
+>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path d="M0 0h24v24H0z" fill="none" />
+        <path fill="currentColor" d="M21.886 5.536A1 1 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569l9 13a.998.998 0 0 0 1.644 0l9-13a1 1 0 0 0 .064-1.033M12 17.243L4.908 7h14.184z" />
+    </svg> 
+    Lihat Informasi Lengkap
+</button>
         <div class="collapse mt-3" id="confidentialInfo">
 
-            <div class="card card-body">
+            <div>
 
-                <table class="table table-sm mb-0">
+                <table>
 
                     <tr>
                         <td width="180"><strong>Harga Beli</strong></td>
@@ -141,7 +154,12 @@
                     <tr>
                         <td><strong>Kondisi</strong></td>
                         <td>
-                            {{ ucfirst($item->condition) }}
+                            @if ($item->condition == 'good')
+                            <small class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-success-emphasis bg-success-subtle border border-success-subtle rounded-2">Baik</small>
+                            @elseif ($item->condition == 'broken')
+                            <small class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-2">Rusak</small>
+                            @endif
+                            {{-- {{ ucfirst($item->condition) }} --}}
                         </td>
                     </tr>
 
@@ -156,14 +174,21 @@
 
 @else
 
- <button
+<tr>
+    <td colspan="2">
+ <a href="{{ url('/admin/login') }}"
             class="btn btn-outline-secondary w-100"
             type="button"
         >
-            🔒 Lihat Informasi Lengkap (Harus Login)
-        </button>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+	<path d="M0 0h24v24H0z" fill="none" />
+	<path fill="currentColor" d="M21.886 5.536A1 1 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569l9 13a.998.998 0 0 0 1.644 0l9-13a1 1 0 0 0 .064-1.033M12 17.243L4.908 7h14.184z" />
+</svg>
+ Lihat Informasi Lengkap (Harus Login)
+</a>
 @endif
-
+    </td>
+</tr>
 
         <tr>
          <td colspan="2">

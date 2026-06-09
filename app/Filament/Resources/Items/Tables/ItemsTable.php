@@ -203,7 +203,20 @@ class ItemsTable
             ->filters([
                 //
             ])
+            ->recordAction('detailItem')
             ->recordActions([
+                Action::make('detailItem')
+                    ->modalHeading(fn ($record) => $record->name)
+                    ->modalWidth('4xl')
+                    ->modalContent(fn ($record) => view(
+                        'filament.items.detail-modal',
+                        [
+                            'record' => $record,
+                        ]
+                    ))
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Tutup'),
+
                 ActionGroup::make([
                     // 1. Tombol Edit
                     EditAction::make(),

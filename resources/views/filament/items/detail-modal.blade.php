@@ -12,7 +12,7 @@
     background: #f8f9fa;
         }
 .card-wrapper {
-            width: 100%;
+            width: 60%;
             max-width: 600px; 
             padding: 20px;
         }
@@ -20,6 +20,7 @@
             border:1px solid #ddd;
             padding:20px;
             border-radius:8px;
+            width:80%;
         }
 
         .title{
@@ -29,7 +30,12 @@
         }
 
         table{
-            width:100%;
+            width:80%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
         }
 
         td{

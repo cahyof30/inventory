@@ -49,7 +49,6 @@
 
      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 
-     <div class="card-wrapper">
 <div class="card" style="display: flex; flex-direction: column;justify-content: center; align-items: center !important;">
 
    <div class="title" style="display: flex; justify-content: center; align-items: center;">
@@ -92,7 +91,6 @@
         </tr>
     </table>
 
-</div>
 </div>
 {{-- <div class="space-y-4">
     <div>

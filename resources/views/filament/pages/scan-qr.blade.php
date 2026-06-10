@@ -142,21 +142,21 @@ function showError(message) {
     document.getElementById('status-area').innerHTML = `
         <div class="text-center">
 
-            <div style="font-size:72px;">❌</div>
+            <div style="font-size:64px;">📦</div>
 
-            <div class="fw-bold text-danger fs-4">
+            <div class="fw-bold text-danger fs-5">
                 QR Tidak Valid
             </div>
 
-            <div class="text-muted mt-2">
+            <div class="text-muted">
                 ${message}
             </div>
 
             <button
-                class="btn btn-primary mt-4"
+                class="btn btn-primary mt-3"
                 onclick="restartScanner()"
             >
-                📷 Scan QR Lagi
+                Scan QR Lagi
             </button>
 
         </div>

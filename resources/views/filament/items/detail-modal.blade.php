@@ -53,10 +53,10 @@
 <div class="card" style="display: flex; flex-direction: column;justify-content: center; align-items: center !important;">
 
    <div class="title" style="display: flex; justify-content: center; align-items: center;">
-    <img src="{{ asset('storage/'.$item->company?->logo) }}" alt="Logo" style="height:100px; vertical-align:middle;">
+    <img src="{{ asset('storage/'.$record->company?->logo) }}" alt="Logo" style="height:100px; vertical-align:middle;">
 </div>
    <div class="title" style="display: flex; justify-content: center; align-items: center;">
-    <img src="{{ $item->image ? asset('storage/'.$item->image) : asset('assets/no_picture.png') }}" alt="Logo" style="height:300px; vertical-align:middle;">
+    <img src="{{ $record->image ? asset('storage/'.$record->image) : asset('assets/no_picture.png') }}" alt="Logo" style="height:300px; vertical-align:middle;">
 </div>
     <div class="title">
         Informasi Aset SGM Group

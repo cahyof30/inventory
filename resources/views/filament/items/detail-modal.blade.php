@@ -1,128 +1,158 @@
 {{-- resources/views/filament/items/detail-modal.blade.php --}}
- <style>
-        body{
-         font-family: Arial, sans-serif;
+
+<style>
+.asset-detail {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.asset-detail__header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.asset-detail__logo {
+    display: block;
+    max-width: 180px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto 1rem;
+}
+
+.asset-detail__image {
+    display: block;
+    max-width: 320px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto 1rem;
+    border-radius: 8px;
+}
+
+.asset-detail__title {
+    font-size: 1.5rem;
+    font-weight: 700;
     margin: 0;
-    min-height: 100vh;
+}
 
-    display: flex;
-    justify-content: center;
+.asset-detail__table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.asset-detail__table tr {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.asset-detail__table td {
+    padding: .75rem 0;
+    vertical-align: top;
+}
+
+.asset-detail__label {
+    width: 180px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.asset-detail__value {
+    word-break: break-word;
+}
+
+.asset-detail__status {
+    display: inline-flex;
     align-items: center;
-
-    background: #f8f9fa;
-        }
-.card-wrapper {
-            width: 60%;
-            max-width: 600px; 
-            padding: 20px;
-        }
-        .card{
-            border:1px solid #ddd;
-            padding:20px;
-            border-radius:8px;
-            width:80%;
-        }
-
-        .title{
-            font-size:24px;
-            font-weight:bold;
-            margin-bottom:20px;
-        }
-
-        table{
-            width:80%;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            justify-content: center;
-            align-items: center;
-        }
-
-        td{
-            padding:8px;
-        }
-
-        /* Berikan efek transisi pada SVG di dalam tombol */
-.btn[data-bs-toggle="collapse"] svg {
-    transition: transform 0.3s ease;
+    padding: .25rem .75rem;
+    border-radius: 999px;
+    font-size: .875rem;
+    font-weight: 600;
 }
 
-/* Ketika tombol diklik (aria-expanded="true"), putar SVG 180 derajat */
-.btn[data-bs-toggle="collapse"][aria-expanded="true"] svg {
-    transform: rotate(180deg);
+.asset-detail__status--verified {
+    background: #dcfce7;
+    color: #166534;
 }
-    </style>
 
-     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+@media (max-width: 640px) {
+    .asset-detail__label {
+        width: 120px;
+    }
 
-<div class="card" style="display: flex; flex-direction: column;justify-content: center; align-items: center !important;">
+    .asset-detail__title {
+        font-size: 1.25rem;
+    }
 
-   <div class="title" style="display: flex; justify-content: center; align-items: center;">
-    <img src="{{ asset('storage/'.$record->company?->logo) }}" alt="Logo" style="height:100px; vertical-align:middle;">
-</div>
-   <div class="title" style="display: flex; justify-content: center; align-items: center;">
-    <img src="{{ $record->image ? asset('storage/'.$record->image) : asset('assets/no_picture.png') }}" alt="Logo" style="width:60%; vertical-align:middle;">
-</div>
-    <div class="title">
-        Informasi Aset SGM Group
+    .asset-detail__logo {
+        max-width: 140px;
+    }
+
+    .asset-detail__image {
+        max-width: 220px;
+    }
+}
+</style>
+
+<div class="asset-detail">
+
+    <div class="asset-detail__header">
+
+        @if($record->company?->logo)
+            <img
+                src="{{ asset('storage/' . $record->company->logo) }}"
+                alt="{{ $record->company->company_name }}"
+                class="asset-detail__logo"
+            >
+        @endif
+
+        <img
+            src="{{ $record->image
+                ? asset('storage/' . $record->image)
+                : asset('assets/no_picture.png') }}"
+            alt="{{ $record->name }}"
+            class="asset-detail__image"
+        >
+
+        <h2 class="asset-detail__title">
+            Informasi Aset SGM Group
+        </h2>
+
     </div>
 
-    <table>
+    <table class="asset-detail__table">
+        <tbody>
+            <tr>
+                <td class="asset-detail__label">Kode Barang</td>
+                <td class="asset-detail__value">{{ $record->code }}</td>
+            </tr>
 
-        <tr>
-            <td width="180">Kode Barang</td>
-            <td>{{ $record->code }}</td>
-        </tr>
+            <tr>
+                <td class="asset-detail__label">Nama Barang</td>
+                <td class="asset-detail__value">{{ $record->name }}</td>
+            </tr>
 
-        <tr>
-            <td>Nama Barang</td>
-            <td>{{ $record->name }}</td>
-        </tr>
+            <tr>
+                <td class="asset-detail__label">Perusahaan</td>
+                <td class="asset-detail__value">
+                    {{ $record->company?->company_name ?? '-' }}
+                </td>
+            </tr>
 
-        <tr>
-            <td>Perusahaan</td>
-            <td>{{ $record->company?->company_name }}</td>
-        </tr>
+            <tr>
+                <td class="asset-detail__label">Lokasi</td>
+                <td class="asset-detail__value">
+                    {{ $record->location?->name ?? '-' }}
+                </td>
+            </tr>
 
-        <tr>
-            <td>Lokasi</td>
-            <td>{{ $record->location?->name }}</td>
-        </tr>
-        <tr>
-            <td>Status</td>
-            <td>
-
-<small class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-success-emphasis bg-success-subtle border border-success-subtle rounded-2">Verified</small>
-</td>
-        </tr>
+            <tr>
+                <td class="asset-detail__label">Status</td>
+                <td class="asset-detail__value">
+                    <span class="asset-detail__status asset-detail__status--verified">
+                        Verified
+                    </span>
+                </td>
+            </tr>
+        </tbody>
     </table>
 
 </div>
-{{-- <div class="space-y-4">
-    <div>
-        <strong>Nama Barang:</strong><br>
-        {{ $record->name }}
-    </div>
-
-    <div>
-        <strong>Kategori:</strong><br>
-        {{ $record->category?->name }}
-    </div>
-
-    <div>
-        <strong>Merek:</strong><br>
-        {{ $record->brand }}
-    </div>
-
-    <div>
-        <strong>Harga Beli:</strong><br>
-        Rp {{ number_format($record->purchase_price, 0, ',', '.') }}
-    </div>
-
-    @if($record->image)
-        <img
-            src="{{ asset('storage/'.$record->image) }}"
-            class="rounded-lg max-w-xs"
-        >
-    @endif
-</div> --}}

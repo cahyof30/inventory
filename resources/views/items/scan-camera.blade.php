@@ -99,7 +99,8 @@ async function onScanSuccess(decodedText) {
     if (isProcessing) {
         return;
     }
-
+    console.log('QR Detected:', decodedText);
+console.log('Valid:', isValidQrUrl(decodedText));
     if (!isValidQrUrl(decodedText)) {
 
     try {

@@ -52,7 +52,9 @@ class ItemVehicleExport implements FromCollection, WithHeadings, WithDrawings, W
 
     public function headings(): array
     {
-        return ['Kode', 'Perusahaan','Kategori', 'Nama Barang', 'Merk',  'No. Polisi', 'Lokasi', 'Harga (IDR)', 'Kondisi', 'QR Code', 'Barcode'];
+        return ['Kode', 'Perusahaan','Kategori', 'Nama Barang', 'Merk',  'No. Polisi', 'Lokasi', 'Harga (IDR)', 'Kondisi', 
+        // 'QR Code', 'Barcode'
+        ];
     }
 
    public function drawings()
@@ -68,27 +70,27 @@ class ItemVehicleExport implements FromCollection, WithHeadings, WithDrawings, W
         |--------------------------------------------------------------------------
         */
 
-        $qrFile = 'qr_' . $item->code . '.png';
-        $qrPath = storage_path('app/public/' . $qrFile);
-        $qrUrl = "https://quickchart.io/qr?text=" . urlencode($item->code) . "&size=150";
+        // $qrFile = 'qr_' . $item->code . '.png';
+        // $qrPath = storage_path('app/public/' . $qrFile);
+        // $qrUrl = "https://quickchart.io/qr?text=" . urlencode($item->code) . "&size=150";
 
-        try {
-            $imageContent = @file_get_contents($qrUrl);
-            if ($imageContent !== false) {
-                file_put_contents($qrPath, $imageContent);
+        // try {
+        //     $imageContent = @file_get_contents($qrUrl);
+        //     if ($imageContent !== false) {
+        //         file_put_contents($qrPath, $imageContent);
 
-                if (file_exists($qrPath)) {
-                    $qrDrawing = new Drawing();
-                    $qrDrawing->setName('QR_' . $item->code);
-                    $qrDrawing->setPath($qrPath);
-                    $qrDrawing->setHeight(70);
-                    $qrDrawing->setCoordinates('J' . $row);
-                    $drawings[] = $qrDrawing;
-                }
-            }
-        } catch (\Exception $e) {
-            continue;
-        }
+        //         if (file_exists($qrPath)) {
+        //             $qrDrawing = new Drawing();
+        //             $qrDrawing->setName('QR_' . $item->code);
+        //             $qrDrawing->setPath($qrPath);
+        //             $qrDrawing->setHeight(70);
+        //             $qrDrawing->setCoordinates('J' . $row);
+        //             $drawings[] = $qrDrawing;
+        //         }
+        //     }
+        // } catch (\Exception $e) {
+        //     continue;
+        // }
 
         /*
         |--------------------------------------------------------------------------
@@ -96,32 +98,32 @@ class ItemVehicleExport implements FromCollection, WithHeadings, WithDrawings, W
         |--------------------------------------------------------------------------
         */
 
-        try {
-            $dns = new DNS1D();
-            $dns->setStorPath(storage_path('framework/barcode/'));
+        // try {
+        //     $dns = new DNS1D();
+        //     $dns->setStorPath(storage_path('framework/barcode/'));
 
-            $barcodeBase64 = $dns->getBarcodePNG($item->code, 'C128', 2, 60);
+        //     $barcodeBase64 = $dns->getBarcodePNG($item->code, 'C128', 2, 60);
 
-            $barcodeFile = 'barcode_' . $item->code . '.png';
-            $barcodePath = storage_path('app/public/' . $barcodeFile);
+        //     $barcodeFile = 'barcode_' . $item->code . '.png';
+        //     $barcodePath = storage_path('app/public/' . $barcodeFile);
 
-            file_put_contents(
-                $barcodePath,
-                base64_decode($barcodeBase64)
-            );
+        //     file_put_contents(
+        //         $barcodePath,
+        //         base64_decode($barcodeBase64)
+        //     );
 
-            if (file_exists($barcodePath)) {
-                $barcodeDrawing = new Drawing();
-                $barcodeDrawing->setName('BARCODE_' . $item->code);
-                $barcodeDrawing->setPath($barcodePath);
-                $barcodeDrawing->setHeight(35);
-                $barcodeDrawing->setCoordinates('K' . $row);
-                $drawings[] = $barcodeDrawing;
-            }
+        //     if (file_exists($barcodePath)) {
+        //         $barcodeDrawing = new Drawing();
+        //         $barcodeDrawing->setName('BARCODE_' . $item->code);
+        //         $barcodeDrawing->setPath($barcodePath);
+        //         $barcodeDrawing->setHeight(35);
+        //         $barcodeDrawing->setCoordinates('K' . $row);
+        //         $drawings[] = $barcodeDrawing;
+        //     }
 
-        } catch (\Exception $e) {
-            continue;
-        }
+        // } catch (\Exception $e) {
+        //     continue;
+        // }
     }
 
     return $drawings;

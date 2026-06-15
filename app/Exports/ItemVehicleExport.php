@@ -32,6 +32,7 @@ class ItemVehicleExport implements FromCollection, WithHeadings, WithDrawings, W
     public function map($item): array
     {
         return [
+            $item->public_uuid,
             $item->code,
             $item->company?->company_name,
             $item->category?->name,
@@ -52,7 +53,7 @@ class ItemVehicleExport implements FromCollection, WithHeadings, WithDrawings, W
 
     public function headings(): array
     {
-        return ['Kode', 'Perusahaan','Kategori', 'Nama Barang', 'Merk',  'No. Polisi', 'Lokasi', 'Harga (IDR)', 'Kondisi', 
+        return ['UUID (Kode Unik)','Kode', 'Perusahaan','Kategori', 'Nama Barang', 'Merk',  'No. Polisi', 'Lokasi', 'Harga (IDR)', 'Kondisi', 
         // 'QR Code', 'Barcode'
         ];
     }

@@ -2,7 +2,7 @@
 
 <div class="card-wrapper">
 
-    <x-search-item />
+    <x-item-detail-search-form />
 
     @if($item)
 

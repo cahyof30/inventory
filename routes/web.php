@@ -55,3 +55,7 @@ Route::get(
 
 Route::post('/search-item', [ItemController::class, 'search'])
     ->name('items.search');
+
+    Route::get('/test-config', function () {
+    dd(config('services.recaptcha'));
+});

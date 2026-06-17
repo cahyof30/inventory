@@ -58,6 +58,32 @@
 </head>
 <body>
 <div class="card-wrapper">
+    <form id="searchForm" action="{{ route('items.search') }}" method="POST" class="mb-4">
+
+    @csrf
+
+    <input type="hidden"
+           name="recaptchaToken"
+           id="recaptchaToken">
+
+    <div class="input-group">
+
+        <input
+            class="form-control"
+            type="text"
+            name="code"
+            placeholder="Masukkan kode barang..."
+            required>
+
+        <button
+            class="btn btn-primary"
+            type="submit">
+            Cari
+        </button>
+
+    </div>
+
+</form>
 <div class="card" style="display: flex; flex-direction: column;justify-content: center; align-items: center !important;">
 
    <div class="title" style="display: flex; justify-content: center; align-items: center;">

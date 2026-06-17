@@ -52,3 +52,6 @@ Route::get(
     '/admin/asset/{uuid}',
     AssetDetail::class
 )->name('asset.detail');
+
+Route::post('/search-item', [ItemController::class, 'search'])
+    ->name('items.search');

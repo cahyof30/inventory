@@ -84,6 +84,12 @@
     </div>
 
 </form>
+
+@if ($errors->any())
+    <div class="alert alert-danger w-100 mb-3 text-center">
+        {{ $errors->first() }}
+    </div>
+@endif
 <div class="card" style="display: flex; flex-direction: column;justify-content: center; align-items: center !important;">
 
    <div class="title" style="display: flex; justify-content: center; align-items: center;">
@@ -298,5 +304,38 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
+    <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
+
+<script>
+
+const form = document.getElementById('searchForm');
+
+form.addEventListener('submit', function(e){
+
+    e.preventDefault();
+
+    grecaptcha.ready(function(){
+
+        grecaptcha.execute(
+            "{{ config('services.recaptcha.site_key') }}",
+            {
+                action:'search_item'
+            }
+        ).then(function(token){
+
+            document
+                .getElementById('recaptchaToken')
+                .value = token;
+
+            form.submit();
+
+        });
+
+    });
+
+});
+
+</script>
 </body>
+
 </html>

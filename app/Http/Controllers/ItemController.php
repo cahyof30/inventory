@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use App\Models\ItemScanLog;
+use App\Services\RecaptchaService;
+use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
@@ -49,5 +51,31 @@ class ItemController extends Controller
             'items.scannew',
             compact('item')
         );
+    }
+
+    public function search(Request $request)
+    {
+        $request->validate([
+            'code' => 'required',
+            'recaptchaToken' => 'required',
+        ]);
+
+        if (! RecaptchaService::verify($request->recaptchaToken)) {
+
+            return back()->withErrors([
+                'code' => 'Verifikasi reCAPTCHA gagal.',
+            ]);
+        }
+
+        $item = Item::where('code', $request->code)->first();
+
+        if (! $item) {
+
+            return back()->withErrors([
+                'code' => 'Kode barang tidak ditemukan.',
+            ]);
+        }
+
+        return redirect()->route('items.scan', $item->uuid);
     }
 }

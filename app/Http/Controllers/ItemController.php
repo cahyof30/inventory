@@ -12,7 +12,7 @@ class ItemController extends Controller
     public function scan(string $uuid)
     {
          return view('pages.item', [
-        'public_uuid' => $uuid,
+        'uuid' => $uuid,
     ]);
         // $item = Item::with([
         //     'company',

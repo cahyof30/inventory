@@ -304,7 +304,7 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
-    <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
+    <script src="https://www.google.com/recaptcha/enterprise.js?render={{ config('services.recaptcha.site_key') }}"></script>
 
 <script>
 
@@ -316,11 +316,11 @@ form.addEventListener('submit', function (e) {
 
     console.log('Submit ditekan');
 
-    grecaptcha.ready(function () {
+    grecaptcha.enterprise.ready(function () {
 
         console.log('grecaptcha ready');
 
-        grecaptcha.execute(
+        grecaptcha.enterprise.execute(
             "{{ config('services.recaptcha.site_key') }}",
             {
                 action: 'search_item'

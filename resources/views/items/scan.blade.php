@@ -307,7 +307,7 @@
     <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
 
 <script>
-    console.log("Site Key dari Laravel:", @json(config('services.recaptcha.site_key')));
+    console.log(@json(config('services.recaptcha.site_key')));
 console.log(grecaptcha);
 const form = document.getElementById('searchForm');
 

@@ -36,8 +36,16 @@ Route::get(
     [PdfController::class, 'previewSticker']
 )->name('items.sticker');
 
-Route::get('/scan/{uuid}', [ItemController::class, 'scan'])
-    ->name('items.scan');
+// Route::get('/scan/{uuid}', [ItemController::class, 'scan'])
+//     ->name('items.scan');
+
+Route::get('/scan/{uuid}', function ($uuid) {
+
+    return view('pages.item', [
+        'uuid' => $uuid,
+    ]);
+
+})->name('items.scan');
 Route::get('/scannew/{code}', [ItemController::class, 'scannew'])
     ->name('items.scannew');
 Route::get(

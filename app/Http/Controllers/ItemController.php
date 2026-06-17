@@ -67,8 +67,8 @@ class ItemController extends Controller
             ]);
         }
 
-        $item = Item::where('code', '=', $request->code, 'and')->first();
-
+        $item = Item::where('code', $request->code)->first();
+        dd($item);
         if (! $item) {
 
             return back()->withErrors([

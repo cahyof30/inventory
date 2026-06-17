@@ -310,22 +310,26 @@
 
 const form = document.getElementById('searchForm');
 
-form.addEventListener('submit', function(e){
+form.addEventListener('submit', function (e) {
 
     e.preventDefault();
 
-    grecaptcha.ready(function(){
+    console.log('Submit ditekan');
+
+    grecaptcha.ready(function () {
+
+        console.log('grecaptcha ready');
 
         grecaptcha.execute(
             "{{ config('services.recaptcha.site_key') }}",
             {
-                action:'search_item'
+                action: 'search_item'
             }
-        ).then(function(token){
+        ).then(function (token) {
 
-            document
-                .getElementById('recaptchaToken')
-                .value = token;
+            console.log(token);
+
+            document.getElementById('recaptchaToken').value = token;
 
             form.submit();
 

@@ -76,6 +76,6 @@ class ItemController extends Controller
             ]);
         }
 
-        return redirect()->route('items.scan', $item->uuid);
+        return redirect()->route('items.scan', $item->public_uuid);
     }
 }

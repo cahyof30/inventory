@@ -4,6 +4,7 @@ namespace App\Livewire;
 use App\Models\Item;
 use App\Models\ItemScanLog;
 use App\Services\RecaptchaService;
+use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 
 class ItemInformation extends Component
@@ -41,15 +42,31 @@ class ItemInformation extends Component
 
     public function search(): void
     {
+        $token = request()->input('recaptchaToken');
         $this->validate([
             'code' => 'required',
             'recaptchaToken' => 'required',
         ]);
 
-        if (! RecaptchaService::verify($this->recaptchaToken)) {
-            $this->addError('code', 'Verifikasi reCAPTCHA gagal.');
+        // if (! RecaptchaService::verify($this->recaptchaToken)) {
+        //     $this->addError('code', 'Verifikasi reCAPTCHA gagal.');
+        //     return;
+        // }
+        // 🔥 VERIFY GOOGLE RECAPTCHA
+        $response = Http::asForm()->post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            [
+                'secret' => config('services.recaptcha.secret_key'),
+                'response' => $this->recaptchaToken,
+                'remoteip' => request()->ip(),
+            ]
+        )->json();
+
+        if (!($response['success'] ?? false)) {
+            $this->addError('code', 'reCAPTCHA gagal. Coba lagi.');
             return;
         }
+
 
         $this->item = Item::where('code', $this->code)->first();
 

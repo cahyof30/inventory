@@ -1,3 +1,4 @@
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 <script>
     const allowedHost =
     window.location.hostname;
@@ -18,42 +19,37 @@
 
 }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+   
 
     <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
 
 <script>
-    console.log("Site Key:", "{{ config('services.recaptcha.site_key') }}");
-console.log(grecaptcha);
-const form = document.getElementById('searchForm');
+document.addEventListener('alpine:init', () => {
+    Alpine.data('recaptchaSearch', (livewire) => ({
+        submit() {
 
-form.addEventListener('submit', function (e) {
-
-    e.preventDefault();
-
-    console.log('Submit ditekan');
-
-    grecaptcha.ready(function () {
-
-        console.log('grecaptcha ready');
-
-        grecaptcha.execute(
-            "{{ config('services.recaptcha.site_key') }}",
-            {
-                action: 'search_item'
+            if (!window.grecaptcha) {
+                console.error('reCAPTCHA not loaded');
+                return;
             }
-        ).then(function (token) {
 
-            console.log(token);
+            grecaptcha.ready(() => {
 
-            document.getElementById('recaptchaToken').value = token;
+                grecaptcha.execute(
+                    "{{ config('services.recaptcha.site_key') }}",
+                    { action: 'search_item' }
+                ).then((token) => {
 
-            form.submit();
+                    // kirim ke Livewire dengan cara aman
+                    livewire.set('recaptchaToken', token)
 
-        });
+                    livewire.call('search')
 
-    });
+                });
 
+            });
+
+        }
+    }));
 });
-
 </script>

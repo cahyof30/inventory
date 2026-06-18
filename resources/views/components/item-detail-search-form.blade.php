@@ -13,7 +13,7 @@
        <button
     type="button"
     class="btn btn-primary"
-    wire:click="search"
+    wire:submit="search"
 >
     Cari
 </button>

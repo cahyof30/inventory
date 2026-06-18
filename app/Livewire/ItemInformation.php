@@ -40,7 +40,7 @@ class ItemInformation extends Component
     ]);
     }
 
-    public function search(): void
+    public function recaptchaSearch(): void
     {
         $token = request()->input('recaptchaToken');
         $this->validate([

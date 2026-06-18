@@ -1,6 +1,6 @@
 <div x-data="recaptchaSearch(@this)" class="mb-3">
     <div class="input-group">
-        <form wire:submit="search" class="d-flex w-100">
+        <form wire:submit="recaptchaSearch" class="d-flex w-100">
 
             <input
                 class="form-control"

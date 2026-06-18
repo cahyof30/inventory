@@ -72,7 +72,7 @@
             class="form-control"
             type="text"
             name="code"
-            placeholder="Masukkan kode barang..."
+            placeholder="Masukkan kode aset..."
             required>
 
         <button

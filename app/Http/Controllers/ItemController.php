@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SearchItemRequest;
 use App\Models\Item;
 use App\Models\ItemScanLog;
+use App\Services\RateLimitService;
 use App\Services\RecaptchaService;
-use Illuminate\Http\Request;
+use BanService;
 
 class ItemController extends Controller
 {
     public function scan(string $uuid)
     {
-    //      return view('pages.item', [
-    //     'uuid' => $uuid,
-    // ]);
+        //      return view('pages.item', [
+        //     'uuid' => $uuid,
+        // ]);
         $item = Item::with([
             'company',
             'location',
@@ -56,28 +58,47 @@ class ItemController extends Controller
         );
     }
 
-    public function search(Request $request)
+    public function search(SearchItemRequest $request)
     {
-        $request->validate([
-            'code' => 'required',
-            'recaptchaToken' => 'required',
-        ]);
+        $ip = $request->ip();
+
+        if (BanService::isBanned($ip)) {
+            return back()->withErrors([
+                'code' => 'IP Anda diblokir sementara.',
+            ]);
+        }
+
+        if (! RateLimitService::check($ip)) {
+            return back()->withErrors([
+                'code' => 'Terlalu banyak permintaan.',
+            ]);
+        }
 
         if (! RecaptchaService::verify($request->recaptchaToken)) {
 
-            return back()->withErrors([
-                'code' => 'Verifikasi reCAPTCHA gagal.',
-            ]);
+            BanService::failed($ip);
+
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'code' => 'Verifikasi reCAPTCHA gagal.',
+                ]);
         }
 
         $item = Item::where('code', $request->code)->first();
-        // dd($item);
+
         if (! $item) {
 
-            return back()->withErrors([
-                'code' => 'Kode barang tidak ditemukan.',
-            ]);
+            BanService::failed($ip);
+
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'code' => 'Kode barang tidak ditemukan.',
+                ]);
         }
+
+        BanService::success($ip);
 
         return redirect()->route('items.scan', $item->public_uuid);
     }

@@ -143,7 +143,7 @@ body{
 @php
 $qr = base64_encode(
     QrCode::format('png')
-        ->size(300)
+        ->size(250)
         ->margin(1)
         ->generate($item->qr_code)
 );

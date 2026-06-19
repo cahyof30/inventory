@@ -51,7 +51,9 @@ class ItemsTable
                     ->sortable()
                     ->visible(fn ($livewire) => $livewire->activeTab !== 'kendaraan'),
                 TextColumn::make('name')
-                    ->searchable(),
+                    ->label('Nama / Kode')
+                    ->description(fn ($record) => $record->code)
+                    ->searchable(['name', 'code']), // Membuat kolom ini bisa dicari berdasarkan nama ATAU kode
                 TextColumn::make('brand')
                     ->searchable(),
                 TextColumn::make('purchase_price')
@@ -262,6 +264,22 @@ class ItemsTable
 
                             return redirect()->route(
                                 'items.sticker',
+                                [
+                                    'ids' => $ids->implode(','),
+                                    'download' => 1,
+                                ]
+                            );
+                        }),
+                        BulkAction::make('downloadStickerA3')
+                        ->label('Download Stiker A3 PNG')
+                        ->icon('heroicon-o-arrow-down-tray')
+                        ->color('success')
+                        ->action(function ($records) {
+
+                            $ids = $records->pluck('id');
+
+                            return redirect()->route(
+                                'items.sticker-a3',
                                 [
                                     'ids' => $ids->implode(','),
                                     'download' => 1,

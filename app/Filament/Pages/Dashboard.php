@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Widgets\AssetOverview;
 use App\Filament\Widgets\DamagedAssetWidget;
 use App\Filament\Widgets\DashboardStat;
 use App\Filament\Widgets\QuickActions;
@@ -13,6 +14,7 @@ use Filament\Widgets\FilamentInfoWidget;
 
 class Dashboard extends BaseDashboard
 {
+    
     public function getHeaderWidgets(): array
     {
         return [];  // kosongkan, atau isi widget yang mau di header
@@ -23,6 +25,7 @@ class Dashboard extends BaseDashboard
         return [
              QuickButton::class,
              DashboardStat::class,
+            //  AssetOverview::class,
              RecentAssetWidget::class,
              DamagedAssetWidget::class,
         ];

@@ -35,6 +35,10 @@ Route::get(
     '/items/sticker',
     [PdfController::class, 'previewSticker']
 )->name('items.sticker');
+Route::get(
+    '/items/sticker',
+    [PdfController::class, 'previewStickerA3']
+)->name('items.sticker-a3');
 
 Route::get('/scan/{uuid}', [ItemController::class, 'scan'])
     ->name('items.scan');

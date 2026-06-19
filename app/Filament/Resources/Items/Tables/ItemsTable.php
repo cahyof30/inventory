@@ -19,9 +19,11 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Torgodly\Html2Media\Actions\Html2MediaAction;
 
 class ItemsTable
 {
@@ -263,14 +265,14 @@ class ItemsTable
                             $ids = $records->pluck('id');
 
                             return redirect()->route(
-                                'items.sticker',
+                                'png.sticker-a4',
                                 [
                                     'ids' => $ids->implode(','),
                                     'download' => 1,
                                 ]
                             );
                         }),
-                        BulkAction::make('downloadStickerA3')
+                    BulkAction::make('downloadStickerA3')
                         ->label('Download Stiker A3 PNG')
                         ->icon('heroicon-o-arrow-down-tray')
                         ->color('success')
@@ -279,12 +281,50 @@ class ItemsTable
                             $ids = $records->pluck('id');
 
                             return redirect()->route(
-                                'items.sticker-a3',
+                                'png.sticker-a3',
                                 [
                                     'ids' => $ids->implode(','),
                                     'download' => 1,
                                 ]
                             );
+                        }),
+                    Html2MediaAction::make('downloadA3')
+                        ->label('Sticker A3')
+                        ->icon('heroicon-o-document-arrow-down')
+                        ->accessSelectedRecords()
+                        ->savePdf()
+                        ->print(false)
+                        ->preview(false)
+                        ->filename('Sticker-A3')
+                        ->format('a3')
+                        ->orientation('landscape')
+                        ->showPageNumbers(false)
+                        ->margins(5)
+                        ->content(function (Collection $records) {
+
+                            return view('pdf.sticker-a3', [
+                                'items' => $records,
+                            ]);
+
+                        }),
+                        Html2MediaAction::make('downloadA4')
+                        ->label('Sticker A4')
+                        ->icon('heroicon-o-document-arrow-down')
+                        ->accessSelectedRecords()
+                        ->savePdf()
+                        ->print(false)
+                        ->preview(false)
+                        ->filename('Sticker-A4')
+                        ->format('a4')
+                        ->orientation('portrait')
+                        ->showPageNumbers(false)
+                        ->margins(5)
+                        ->content(function (Collection $records) {
+
+                            return view('pdf.sticker', [
+                                'items' => $records,
+                            ]);
+
                         }),
                 ]),
             ]);

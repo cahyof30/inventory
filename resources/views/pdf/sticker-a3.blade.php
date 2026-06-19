@@ -140,8 +140,17 @@ body{
             </td>
 
             <td class="qr-cell">
+@php
+$qr = base64_encode(
+    QrCode::format('png')
+        ->size(300)
+        ->margin(1)
+        ->generate($item->qr_code)
+);
+@endphp
 
-                <img src="{{ $item->qr_image }}">
+<img src="data:image/png;base64,{{ $qr }}">
+                {{-- <img src="{{ $item->qr_image }}"> --}}
 
             </td>
 
@@ -175,9 +184,9 @@ body{
 
 @endforeach
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> --}}
 
-<script>
+{{-- <script>
 async function downloadPNG(){
 
     const pages = document.querySelectorAll('.page');
@@ -209,7 +218,7 @@ window.addEventListener('load', function () {
     downloadPNG();
 });
 </script>
-@endif
+@endif --}}
 
 </body>
 </html>

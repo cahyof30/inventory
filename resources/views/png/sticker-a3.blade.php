@@ -5,9 +5,9 @@
 
 <style>
 @page{
-    size: A4 portrait;
-   margin:5mm;
-}
+   size:A3 landscape;
+    margin:5mm;
+    }
 
 body{
     margin:0;
@@ -18,12 +18,12 @@ body{
 }
 
 .sheet{
-    width:210mm;
+   width:420mm;
     min-height:297mm;
-    background:#fff;
     padding:5mm;
     box-sizing:border-box;
     margin:auto;
+    background:#fff;
 }
 
 .page{
@@ -101,87 +101,81 @@ body{
 </head>
 <body>
 
-@foreach($items->chunk(16) as $page)
+@foreach($items->chunk(36) as $page)
 
 <div class="sheet page">
 
-    <table width="100%" cellspacing="2" cellpadding="0">
+<table width="100%" cellspacing="3" cellpadding="0">
 
-        @foreach($page->chunk(2) as $row)
+@foreach($page->chunk(4) as $row)
+
+<tr>
+
+@foreach($row as $item)
+
+<td width="25%" valign="top">
+
+    <table class="sticker">
 
         <tr>
 
-            @foreach($row as $item)
+            <td class="logo-cell">
 
-            <td width="50%" valign="top">
-
-                <table class="sticker">
-
-                    <tr>
-
-                        <td class="logo-cell">
-
-                            @if($item->company?->logo)
-                                <img
-                                    src="data:image/png;base64,{{ base64_encode(Storage::disk('public')->get($item->company->logo)) }}"
-                                    alt="Logo"
-                                >
-                            @endif
-
-                        </td>
-
-                        <td class="info-cell">
-
-                            <div class="item-name">
-                                {{ Str::limit($item->name, 40) }}
-                            </div>
-
-                            <div class="item-code">
-                                Kode: {{ $item->code }}
-                            </div>
-
-                        </td>
-
-                        <td class="qr-cell">
-
-                            <img
-                                src="{{ $item->qr_image }}"
-                                alt="QR Code"
-                            >
-
-                        </td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td colspan="3" class="company">
-                            {{ $item->company->company_name }}
-                        </td>
-
-                    </tr>
-
-                </table>
+                @if($item->company?->logo)
+                    <img src="data:image/png;base64,{{ base64_encode(Storage::disk('public')->get($item->company->logo)) }}">
+                @endif
 
             </td>
 
-            @endforeach
+            <td class="info-cell">
 
-            @if($row->count() == 1)
-                <td width="50%"></td>
-            @endif
+                <div class="item-name">
+                    {{ Str::limit($item->name,40) }}
+                </div>
+
+                <div class="item-code">
+                    Kode: {{ $item->code }}
+                </div>
+
+            </td>
+
+            <td class="qr-cell">
+
+                <img src="{{ $item->qr_image }}">
+
+            </td>
 
         </tr>
 
-        @endforeach
+        <tr>
+
+            <td colspan="3" class="company">
+                {{ $item->company->company_name }}
+            </td>
+
+        </tr>
 
     </table>
+
+</td>
+
+@endforeach
+
+@for($i = $row->count(); $i < 4; $i++)
+<td width="25%"></td>
+@endfor
+
+</tr>
+
+@endforeach
+
+</table>
 
 </div>
 
 @endforeach
 
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <script>
 async function downloadPNG(){
@@ -191,7 +185,7 @@ async function downloadPNG(){
     for(let i = 0; i < pages.length; i++){
 
         const canvas = await html2canvas(pages[i],{
-            scale:4,
+            scale:6,
             useCORS:true,
             backgroundColor:'#ffffff'
         });
@@ -215,7 +209,7 @@ window.addEventListener('load', function () {
     downloadPNG();
 });
 </script>
-@endif --}}
+@endif
 
 </body>
 </html>

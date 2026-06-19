@@ -3,6 +3,7 @@
 use App\Filament\Pages\AssetDetail;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\PngController;
 use App\Http\Controllers\PublicAssetController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,7 +40,14 @@ Route::get(
     '/items/sticker',
     [PdfController::class, 'previewStickerA3']
 )->name('items.sticker-a3');
-
+Route::get(
+    '/png/sticker',
+    [PngController::class, 'previewSticker']
+)->name('png.sticker-a4');
+Route::get(
+    '/png/sticker-a3',
+    [PngController::class, 'previewStickerA3']
+)->name('png.sticker-a3');
 Route::get('/scan/{uuid}', [ItemController::class, 'scan'])
     ->name('items.scan');
 

@@ -181,7 +181,7 @@ body{
 
 @endforeach
 
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <script>
 async function downloadPNG(){
@@ -215,7 +215,7 @@ window.addEventListener('load', function () {
     downloadPNG();
 });
 </script>
-@endif --}}
+@endif
 
 </body>
 </html>

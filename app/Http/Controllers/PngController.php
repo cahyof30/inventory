@@ -44,7 +44,9 @@ class PngController extends Controller
             'imageBase64' => true,
         ]);
 
-        $items = Item::whereIn('id', $ids)->get();
+       $items = Item::select('id', 'code', 'qr_code')
+        ->whereIn('id', $ids)
+        ->get();
 
         $items->transform(function ($item) use ($options) {
 

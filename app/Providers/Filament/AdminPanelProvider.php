@@ -15,6 +15,7 @@ use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Hammadzafar05\MobileBottomNav\MobileBottomNav;
+use Hammadzafar05\MobileBottomNav\MobileBottomNavItem;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -62,7 +63,21 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
-                MobileBottomNav::make(),
+                MobileBottomNav::make()
+                    ->items([
+                        MobileBottomNavItem::make('Dashboard')
+                            ->icon('heroicon-o-home')
+                            ->activeIcon('heroicon-s-home')
+                            ->url('/admin')
+                            ->isActive(fn () => request()->is('admin')),
+                        MobileBottomNavItem::make('Scan QR')
+                            ->icon('heroicon-o-qr-code')
+                            ->url('/admin/scan-qr'),
+                        MobileBottomNavItem::make('Items')
+                            ->icon('heroicon-o-archive-box')
+                            ->url('/admin/items')
+                            ->badge(5, 'danger'),
+                    ]),
             ]);
     }
 }

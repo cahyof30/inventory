@@ -37,10 +37,10 @@ body {
 
 /* Mengubah stiker menjadi satu kolom terpusat */
 .sticker {
-    width: 45mm;
+    /* width: 45mm; */
     border: 2px solid #000;
     border-collapse: collapse;
-    margin: 5mm auto;
+    margin: 2mm auto;
     text-align: center;
 }
 
@@ -75,16 +75,31 @@ body {
 </head>
 <body>
 
-@foreach($items->chunk(16) as $page)
+@foreach($items->chunk(30) as $page)
+
+
 
 <div class="sheet page">
 
     <table width="100%" cellspacing="2" cellpadding="0">
 
-        @foreach($page->chunk(4) as $row) <tr>
+        @foreach($page->chunk(5) as $row) <tr>
 
             @foreach($row as $item)
+@php
+    $logo = public_path('storage/' . $item->company->logo);
 
+$qr = base64_encode(
+    QrCode::format('png')
+        ->size(600)
+        ->margin(1)
+        ->errorCorrection('H')
+        ->merge($logo, 0.2, true)
+        ->generate($item->qr_code)
+);
+
+$item->qr_image = 'data:image/png;base64,' . $qr;
+@endphp
             <td width="25%" valign="top">
 
                 <table class="sticker">
@@ -97,7 +112,7 @@ body {
 
                     <tr>
                         <td class="code-cell">
-                            Kode: {{ $item->code }}
+                            {{ $item->code }}
                         </td>
                     </tr>
 

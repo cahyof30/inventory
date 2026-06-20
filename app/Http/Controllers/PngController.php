@@ -19,7 +19,9 @@ class PngController extends Controller
             'imageBase64' => true,
         ]);
 
-        $items = Item::whereIn('id', $ids)->get();
+        $items = Item::select('id', 'code', 'qr_code')
+            ->whereIn('id', $ids)
+            ->get();
 
         $items->transform(function ($item) use ($options) {
 
@@ -34,7 +36,8 @@ class PngController extends Controller
             'autoDownload' => $request->boolean('download'),
         ]);
     }
-     public function previewSticker(Request $request)
+
+    public function previewSticker(Request $request)
     {
         $ids = explode(',', $request->ids);
 
@@ -44,9 +47,9 @@ class PngController extends Controller
             'imageBase64' => true,
         ]);
 
-       $items = Item::select('id', 'code', 'qr_code')
-        ->whereIn('id', $ids)
-        ->get();
+        $items = Item::select('id', 'name', 'company_id', 'brand', 'code', 'qr_code')
+            ->whereIn('id', $ids)
+            ->get();
 
         $items->transform(function ($item) use ($options) {
 
@@ -61,6 +64,7 @@ class PngController extends Controller
             'autoDownload' => $request->boolean('download'),
         ]);
     }
+
     public function previewStickerA3(Request $request)
     {
         $ids = explode(',', $request->ids);
@@ -71,7 +75,10 @@ class PngController extends Controller
             'imageBase64' => true,
         ]);
 
-        $items = Item::whereIn('id', $ids)->get();
+        // $items = Item::whereIn('id', $ids)->get();
+        $items = Item::select('id', 'name', 'company_id', 'brand', 'code', 'qr_code')
+            ->whereIn('id', $ids)
+            ->get();
 
         $items->transform(function ($item) use ($options) {
 

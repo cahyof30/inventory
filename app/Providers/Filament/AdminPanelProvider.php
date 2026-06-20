@@ -64,6 +64,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 MobileBottomNav::make()
+                    ->moreButton(false)
                     ->items([
                         MobileBottomNavItem::make('Dashboard')
                             ->icon('heroicon-o-home')
@@ -75,8 +76,8 @@ class AdminPanelProvider extends PanelProvider
                             ->url('/admin/scan-qr'),
                         MobileBottomNavItem::make('Items')
                             ->icon('heroicon-o-archive-box')
-                            ->url('/admin/items')
-                            ->badge(5, 'danger'),
+                            ->url('/admin/items'),
+                        // ->badge(5, 'danger'),
                     ]),
             ]);
     }

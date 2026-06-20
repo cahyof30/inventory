@@ -288,6 +288,22 @@ class ItemsTable
                                 ]
                             );
                         }),
+                        BulkAction::make('downloadStickerQR')
+                        ->label('Download Stiker (QR Only) PNG')
+                        ->icon('heroicon-o-arrow-down-tray')
+                        ->color('success')
+                        ->action(function ($records) {
+
+                            $ids = $records->pluck('id');
+
+                            return redirect()->route(
+                                'png.sticker-qr-a4',
+                                [
+                                    'ids' => $ids->implode(','),
+                                    'download' => 1,
+                                ]
+                            );
+                        }),
                     Html2MediaAction::make('downloadA3')
                         ->label('Sticker A3')
                         ->icon('heroicon-o-document-arrow-down')

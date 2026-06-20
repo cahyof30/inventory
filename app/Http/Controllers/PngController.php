@@ -9,6 +9,31 @@ use Illuminate\Http\Request;
 
 class PngController extends Controller
 {
+    public function previewQrSticker(Request $request)
+    {
+        $ids = explode(',', $request->ids);
+
+        $options = new QROptions([
+            'outputType' => QRCode::OUTPUT_IMAGE_PNG,
+            'scale' => 5,
+            'imageBase64' => true,
+        ]);
+
+        $items = Item::whereIn('id', $ids)->get();
+
+        $items->transform(function ($item) use ($options) {
+
+            $item->qr_image = (new QRCode($options))
+                ->render($item->qr_code);
+
+            return $item;
+        });
+
+        return view('png.sticker-qr-a4', [
+            'items' => $items,
+            'autoDownload' => $request->boolean('download'),
+        ]);
+    }
      public function previewSticker(Request $request)
     {
         $ids = explode(',', $request->ids);

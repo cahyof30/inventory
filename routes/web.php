@@ -45,6 +45,10 @@ Route::get(
     [PngController::class, 'previewSticker']
 )->name('png.sticker-a4');
 Route::get(
+    '/png/sticker-qr',
+    [PngController::class, 'previewQrSticker']
+)->name('png.sticker-qr-a4');
+Route::get(
     '/png/sticker-a3',
     [PngController::class, 'previewStickerA3']
 )->name('png.sticker-a3');

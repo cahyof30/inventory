@@ -71,6 +71,7 @@ body{
 .qr-cell img{
     width:20mm;
     height:20mm;
+    object-fit: contain;
 }
 
 .item-name{

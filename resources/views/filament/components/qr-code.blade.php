@@ -5,9 +5,9 @@
             {!! QrCode::size(250)->margin(1)->generate($state) !!}
         </div>
         
-        <span class="mt-4 text-sm font-mono text-gray-500 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded max-w-full break-all">
+        {{-- <span class="mt-4 text-sm font-mono text-gray-500 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded max-w-full break-all">
             {{ $state }}
-        </span>
+        </span> --}}
     </div>
 
     <div class="w-full flex justify-end mt-6">

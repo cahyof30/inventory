@@ -15,6 +15,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
+use Filament\Support\Enums\Alignment;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
@@ -226,16 +227,19 @@ class ItemsTable
                     EditAction::make(),
 
                     // 2. Tombol Lihat Barcode (Modal)
-                    Action::make('view_barcode')
-                        ->label('Barcode')
+                    Action::make('view_qr')
+                        ->label('QR Code')
                         ->icon('heroicon-o-qr-code')
-                        ->color('info')
-                        ->modalHeading(fn ($record) => "Barcode - {$record->name} ".($record->brand ? "({$record->brand})" : ''))
-                        ->modalContent(fn ($record) => view('filament.components.barcode', [
-                            'record' => $record,
-                        ]))
-                        ->modalSubmitAction(false)
-                        ->modalCancelActionLabel('Tutup'),
+                        ->color('success')
+                        ->modalHeading('QR Code Asset')
+                        ->modalWidth('md') // Membatasi lebar modal supaya pas dengan QR Code
+                        ->modalAlignment(Alignment::Center) // Memastikan konten modal berada di tengah
+                        ->modalCancelActionLabel('Tutup') // Tombol tutup bawaan Filament
+                        ->modalSubmitAction(false) // Menyembunyikan tombol submit (Save)
+                        ->modalContent(fn ($record) => view(
+                            'filament.components.qr-code',
+                            ['state' => $record->qr_code] // Pastikan variabel '$record->code' sesuai dengan data Anda
+                        )),
                     // Action::make('printSticker')
                     //     ->label('Cetak Stiker')
                     //     ->icon('heroicon-o-printer')
@@ -288,7 +292,7 @@ class ItemsTable
                                 ]
                             );
                         }),
-                        BulkAction::make('downloadStickerQR')
+                    BulkAction::make('downloadStickerQR')
                         ->label('Download Stiker (QR Only) PNG')
                         ->icon('heroicon-o-arrow-down-tray')
                         ->color('success')
@@ -323,7 +327,7 @@ class ItemsTable
                             ]);
 
                         }),
-                        Html2MediaAction::make('downloadA4')
+                    Html2MediaAction::make('downloadA4')
                         ->label('Sticker A4')
                         ->icon('heroicon-o-document-arrow-down')
                         ->accessSelectedRecords()

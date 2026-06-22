@@ -80,20 +80,20 @@ trait HasInventoryCode
 
     //     return $dns->getBarcodePNG($this->code, 'C128');
     // }
-    public function getBarcodeBase64Attribute(): string
-{
-    if (!$this->code) {
-        return '';
-    }
+//     public function getBarcodeBase64Attribute(): string
+// {
+//     if (!$this->code) {
+//         return '';
+//     }
 
-    $dns = new DNS1D();
-    $dns->setStorPath(storage_path('framework/barcode/'));
+//     $dns = new DNS1D();
+//     $dns->setStorPath(storage_path('framework/barcode/'));
 
-    return $dns->getBarcodePNG(
-        $this->code,
-        'C128',
-        3,   // scale (lebar garis)
-        80   // height (tinggi barcode)
-    );
-}
+//     return $dns->getBarcodePNG(
+//         $this->code,
+//         'C128',
+//         3,   // scale (lebar garis)
+//         80   // height (tinggi barcode)
+//     );
+// }
 }

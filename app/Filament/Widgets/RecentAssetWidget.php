@@ -28,7 +28,7 @@ class RecentAssetWidget extends TableWidget
                     ->tooltip(fn (TextColumn $column): ?string => $column->getState()), // Menampilkan teks asli penuh saat di-hover
 
                 TextColumn::make('name')
-                    ->label('Nama Asset')
+                    ->label('Nama Aset')
                     ->description(fn ($record) => $record->brand) // Menampilkan brand di bawah nama
                     ->searchable(['name', 'brand']), // Membuat kolom ini bisa dicari berdasarkan nama ATAU brand
 

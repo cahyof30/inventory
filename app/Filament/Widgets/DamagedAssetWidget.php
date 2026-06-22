@@ -27,9 +27,8 @@ class DamagedAssetWidget extends TableWidget
                     ->limit(6) // Memotong teks jika melebihi 8 karakter dan otomatis menambah '...'
                     ->tooltip(fn (TextColumn $column): ?string => $column->getState()), // Menampilkan teks asli penuh saat di-hover
 
-
                 TextColumn::make('name')
-                    ->label('Nama Asset')
+                    ->label('Nama Aset')
                     ->description(fn ($record) => $record->brand) // Menampilkan brand di bawah nama
                     ->searchable(['name', 'brand']), // Membuat kolom ini bisa dicari berdasarkan nama ATAU brand
                 TextColumn::make('location.name')

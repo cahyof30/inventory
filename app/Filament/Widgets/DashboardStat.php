@@ -52,8 +52,8 @@ class DashboardStat extends StatsOverviewWidget
         }
 
            return [
-            Stat::make('Total Asset', $totalAssets)
-                ->description('Seluruh asset terdaftar')
+            Stat::make('Total Aset', $totalAssets)
+                ->description('Seluruh aset terdaftar')
                 ->descriptionIcon('heroicon-m-cube')
                 ->color('info')
                 ->chart($chartAsset),
@@ -65,7 +65,7 @@ class DashboardStat extends StatsOverviewWidget
                 // ->chart([2, 4, 5, 8, 10, 12, 15]),
                 ->chart($chartUser),
 
-            Stat::make('Asset Rusak', $damagedAssets)
+            Stat::make('Aset Rusak', $damagedAssets)
                 ->description('Perlu diperhatikan')
                 ->descriptionIcon('heroicon-m-exclamation-triangle')
                 ->color('danger')
@@ -73,7 +73,7 @@ class DashboardStat extends StatsOverviewWidget
                 ->chart($chartDamagedAssets),
 
 
-            Stat::make('Asset Tersedia', $availableAssets)
+            Stat::make('Aset Tersedia', $availableAssets)
                 ->description('Siap digunakan')
                 ->descriptionIcon('heroicon-m-check-circle')
                 ->color('success')

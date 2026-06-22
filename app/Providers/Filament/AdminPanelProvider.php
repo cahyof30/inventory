@@ -48,6 +48,7 @@ class AdminPanelProvider extends PanelProvider
                 QuickActions::class,
                 // ItemConditionChart::class,
             ])
+            // ->viteTheme('resources/css/app.css')
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

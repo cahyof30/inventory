@@ -64,19 +64,25 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 MobileBottomNav::make()
-                    ->moreButton(false)
+                    ->moreButton(true)
                     ->items([
                         MobileBottomNavItem::make('Dashboard')
                             ->icon('heroicon-o-home')
                             ->activeIcon('heroicon-s-home')
                             ->url('/admin')
                             ->isActive(fn () => request()->is('admin')),
+                        MobileBottomNavItem::make('Peminjaman')
+                            ->icon('heroicon-o-arrow-path')
+                            ->url('/admin/loans'),
                         MobileBottomNavItem::make('Scan QR')
                             ->icon('heroicon-o-qr-code')
                             ->url('/admin/scan-qr'),
-                        MobileBottomNavItem::make('Items')
+                        MobileBottomNavItem::make('Aset')
                             ->icon('heroicon-o-archive-box')
                             ->url('/admin/items'),
+                        // MobileBottomNavItem::make('More')
+                        //     ->icon('heroicon-o-archive-box')
+                        //     ->url('/admin/items'),
                         // ->badge(5, 'danger'),
                     ]),
             ]);

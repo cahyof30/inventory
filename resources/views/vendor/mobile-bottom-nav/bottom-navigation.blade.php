@@ -219,7 +219,7 @@
         $badgeCssColor = is_string($badgeColor) ? "var(--{$badgeColor}-500)" : 'var(--primary-500)';
 
         // Menu tengah
-        $isCenterAction = $index === 1;
+        $isCenterAction = $index === 2;
     @endphp
 
     <a

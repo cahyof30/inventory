@@ -134,11 +134,11 @@
                             </span>
                         @endif
 
-                        {{-- @if ($record->brand)
+                        @if ($record->brand)
                             <span style="border-radius:999px;padding:2px 8px;font-size:10px;font-weight:500;background:#f3f4f6;color:#6b7280;">
                                 {{ $record->brand }}
                             </span>
-                        @endif --}}
+                        @endif
 
                         @if ($record->location)
                             <span style="display:inline-flex;align-items:center;gap:3px;border-radius:999px;padding:2px 8px;font-size:10px;font-weight:500;background:#fef3c7;color:#92400e;">
@@ -325,7 +325,6 @@
 @endif --}}
 
 {{-- QR Code Modal --}}
-{{-- QR Code Modal (Cukup satu di luar loop, aman dari error $record) --}}
 <template x-if="openQr">
     <div
         x-cloak
@@ -356,8 +355,9 @@
                 style="font-size: 18px; font-weight: 600; margin-bottom: 18px;"
             ></h3>
 
-            {{-- Tempat penampung QR Code SVG yang diisi via Alpine.js --}}
-            <div x-ref="qrContainer" style="display: flex; justify-content: center;"></div>
+            <div style="display: flex; justify-content: center;">
+                {!! QrCode::size(220)->margin(1)->generate($record->qr_code) !!}
+            </div>
 
             <p
                 x-text="qr"
@@ -383,6 +383,7 @@
         </div>
     </div>
 </template>
+
 
 {{-- Detail Modal --}}
 <div

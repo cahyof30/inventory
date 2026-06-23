@@ -9,6 +9,8 @@
         openQr: false,
         qr: '',
         name: '',
+        openDetail:false,
+        detail:{},
     }"
 >
     {{-- Search --}}
@@ -160,7 +162,7 @@
                      tidak bisa dipanggil dari Livewire component terpisah --}}
                 <a
                     href="{{ ItemResource::getUrl('edit', ['record' => $record]) }}"
-                    style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:11px 0;font-size:11px;font-weight:600;color:#6b7280;text-decoration:none;border-right:1px solid #f3f4f6;">
+                    style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:11px 0;font-size:11px;font-weight:600;color:#1447e6;text-decoration:none;border-right:1px solid #f3f4f6;">
                     
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
 	<path d="M0 0h24v24H0z" fill="none" />
@@ -191,17 +193,28 @@
 
                 {{-- Detail: link ke halaman edit sebagai fallback karena modal Filament
                      tidak bisa dipanggil dari Livewire component terpisah --}}
+                
+              <button
+    type="button"
+    @click="
+        detail = {
+            image: @js($record->image ? Storage::url($record->image) : asset("assets/no_picture.png")),
+            logo: @js($record->company?->logo ? asset("storage/".$record->company->logo) : ""),
+            code: @js($record->code),
+            name: @js($record->name),
+            company: @js($record->company?->company_name ?? "-"),
+            location: @js($record->location?->name ?? "-"),
+            category: @js($record->category?->name ?? "-"),
+            brand: @js($record->brand ?? "-"),
+            price: @js($record->purchase_price
+                ? 'Rp '.number_format($record->purchase_price,0,',','.')
+                : '-')};
 
-                <a
-                    href="{{ ItemResource::getUrl('edit', ['record' => $record]) }}"
-                    style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:11px 0;font-size:11px;font-weight:600;color:#6b7280;text-decoration:none;border-right:1px solid #f3f4f6;">
-                    
-                    <svg xmlns="http://www.w3.org/2000/svg" style="width:14px;height:14px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                    </svg>
-                    Detail
-                </a>
+        openDetail = true;"
+    style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:11px 0;font-size:11px;font-weight:600;color:#6b7280;background:none;border:none;border-right:1px solid #f3f4f6;cursor:pointer;"
+>
+    Detail
+</button>
                 {{-- Hapus --}}
                 <button
                     wire:click="deleteRecord({{ $record->id }})"
@@ -306,7 +319,7 @@
     </div>
 @endif --}}
 
-
+{{-- QR Code Modal --}}
 <template x-if="openQr">
     <div
         x-cloak
@@ -365,4 +378,169 @@
         </div>
     </div>
 </template>
+
+
+{{-- Detail Modal --}}
+<div
+    x-show="openDetail"
+    x-transition.opacity
+    x-cloak
+    style="
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.45);
+        display:flex;
+        align-items:flex-end;
+        justify-content:center;
+        z-index:9999;
+    "
+    @click="openDetail=false"
+>
+
+<div
+    @click.stop
+    style="
+        width:100%;
+        max-width:480px;
+        background:white;
+        border-radius:24px 24px 0 0;
+        padding:20px;
+        max-height:90vh;
+        overflow:auto;
+    "
+>
+
+<div style="width:48px;height:5px;background:#ddd;border-radius:999px;margin:0 auto 20px;"></div>
+
+<template x-if="detail.logo">
+    <img
+        :src="detail.logo"
+        style="height:48px;margin:auto;display:block;margin-bottom:15px;"
+    >
+</template>
+
+<img
+    :src="detail.image"
+    style="
+        width:120px;
+        height:120px;
+        object-fit:cover;
+        border-radius:16px;
+        display:block;
+        margin:auto;
+        border:1px solid #eee;
+    "
+>
+
+<h2
+    x-text="detail.name"
+    style="
+        text-align:center;
+        margin-top:18px;
+        font-size:20px;
+        font-weight:700;
+    "
+></h2>
+
+<p
+    x-text="detail.code"
+    style="
+        text-align:center;
+        color:#9ca3af;
+        font-size:13px;
+        margin-bottom:20px;
+    "
+></p>
+
+<div
+    style="
+        display:inline-flex;
+        padding:5px 12px;
+        border-radius:999px;
+        background:#dcfce7;
+        color:#166534;
+        font-size:12px;
+        font-weight:600;
+        margin:auto;
+        display:flex;
+        width:max-content;
+        margin-bottom:20px;
+    "
+>
+    ✔ Verified
+</div>
+
+<div style="display:grid;gap:12px;">
+
+    <div style="background:#f9fafb;padding:14px;border-radius:14px;">
+        <div style="font-size:11px;color:#9ca3af;">🏢 Perusahaan</div>
+        <div x-text="detail.company" style="font-weight:600;"></div>
+    </div>
+
+    <div style="background:#f9fafb;padding:14px;border-radius:14px;">
+        <div style="font-size:11px;color:#9ca3af;">📍 Lokasi</div>
+        <div x-text="detail.location" style="font-weight:600;"></div>
+    </div>
+
+    <div style="background:#f9fafb;padding:14px;border-radius:14px;">
+        <div style="font-size:11px;color:#9ca3af;">🏷 Kategori</div>
+        <div x-text="detail.category" style="font-weight:600;"></div>
+    </div>
+
+    <div style="background:#f9fafb;padding:14px;border-radius:14px;">
+        <div style="font-size:11px;color:#9ca3af;">🏭 Brand</div>
+        <div x-text="detail.brand" style="font-weight:600;"></div>
+    </div>
+
+    <div style="background:#FEF3C7;padding:14px;border-radius:14px;">
+        <div style="font-size:11px;color:#92400E;">💰 Nilai Aset</div>
+        <div
+            x-text="detail.price"
+            style="font-weight:700;font-size:18px;color:#B45309;"
+        ></div>
+    </div>
+
+</div>
+
+<div style="display:flex;gap:10px;margin-top:22px;">
+
+    <button
+        @click="
+            qr='{{ '' }}';
+            qr=detail.code;
+            openDetail=false;
+            openQr=true;
+        "
+        style="
+            flex:1;
+            background:#10b981;
+            color:white;
+            border:none;
+            border-radius:12px;
+            padding:12px;
+            font-weight:600;
+        "
+    >
+        QR Code
+    </button>
+
+    <button
+        @click="openDetail=false"
+        style="
+            flex:1;
+            background:#f3f4f6;
+            border:none;
+            border-radius:12px;
+            padding:12px;
+            font-weight:600;
+        "
+    >
+        Tutup
+    </button>
+
+</div>
+
+</div>
+
+</div>
 </div>

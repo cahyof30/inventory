@@ -114,7 +114,7 @@
                 {{-- Info --}}
                 <div style="flex:1;min-width:0;">
                     <p style="font-size:14px;font-weight:600;color:#111827;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px;">
-                        {{ $record->name }} {{ $record->brand }}
+                        {{ $record->name }} {{ $record->brand }} {{ $record->specification['seri'] ?? '' }}
                     </p>
                     @if ($record->code)
                         <p style="font-size:11px;font-family:monospace;color:#9ca3af;margin-bottom:6px;">

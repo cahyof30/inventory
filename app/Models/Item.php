@@ -25,13 +25,13 @@ class Item extends Model
         'qr_code',
         'location_id',
         'description',
-        'specifications',
+        'specification',
     ];
 
     public $timestamps = true;
 
     protected $casts = [
-        'specifications' => 'array',
+        'specification' => 'array',
     ];
 
     public function getQrUrlAttribute(): string

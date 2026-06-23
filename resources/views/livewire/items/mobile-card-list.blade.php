@@ -114,7 +114,7 @@
                 {{-- Info --}}
                 <div style="flex:1;min-width:0;">
                     <p style="font-size:14px;font-weight:600;color:#111827;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px;">
-                        {{ $record->name }}
+                        {{ $record->name }} {{ $record->brand }}
                     </p>
                     @if ($record->code)
                         <p style="font-size:11px;font-family:monospace;color:#9ca3af;margin-bottom:6px;">
@@ -134,11 +134,11 @@
                             </span>
                         @endif
 
-                        @if ($record->brand)
+                        {{-- @if ($record->brand)
                             <span style="border-radius:999px;padding:2px 8px;font-size:10px;font-weight:500;background:#f3f4f6;color:#6b7280;">
                                 {{ $record->brand }}
                             </span>
-                        @endif
+                        @endif --}}
 
                         @if ($record->location)
                             <span style="display:inline-flex;align-items:center;gap:3px;border-radius:999px;padding:2px 8px;font-size:10px;font-weight:500;background:#fef3c7;color:#92400e;">
@@ -212,7 +212,12 @@
 
         openDetail = true;"
     style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:11px 0;font-size:11px;font-weight:600;color:#6b7280;background:none;border:none;border-right:1px solid #f3f4f6;cursor:pointer;"
->
+><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+	<path d="M0 0h24v24H0z" fill="none" />
+	<path fill="currentColor" d="M12 9a3 3 0 1 0 0 6a3 3 0 1 0 0-6" />
+	<path fill="currentColor" d="M12 19c7.63 0 9.93-6.62 9.95-6.68c.07-.21.07-.43 0-.63c-.02-.07-2.32-6.68-9.95-6.68s-9.93 6.61-9.95 6.67c-.07.21-.07.43 0 .63c.02.07 2.32 6.68 9.95 6.68Zm0-12c5.35 0 7.42 3.85 7.93 5c-.5 1.16-2.58 5-7.93 5s-7.42-3.84-7.93-5c.5-1.16 2.58-5 7.93-5" />
+</svg>
+
     Detail
 </button>
                 {{-- Hapus --}}
@@ -320,6 +325,7 @@
 @endif --}}
 
 {{-- QR Code Modal --}}
+{{-- QR Code Modal (Cukup satu di luar loop, aman dari error $record) --}}
 <template x-if="openQr">
     <div
         x-cloak
@@ -350,9 +356,8 @@
                 style="font-size: 18px; font-weight: 600; margin-bottom: 18px;"
             ></h3>
 
-            <div style="display: flex; justify-content: center;">
-                {!! QrCode::size(220)->margin(1)->generate($record->qr_code) !!}
-            </div>
+            {{-- Tempat penampung QR Code SVG yang diisi via Alpine.js --}}
+            <div x-ref="qrContainer" style="display: flex; justify-content: center;"></div>
 
             <p
                 x-text="qr"
@@ -379,7 +384,6 @@
     </div>
 </template>
 
-
 {{-- Detail Modal --}}
 <div
     x-show="openDetail"
@@ -405,12 +409,13 @@
         background:white;
         border-radius:24px 24px 0 0;
         padding:20px;
+        margin-top:20px;
         max-height:90vh;
         overflow:auto;
     "
 >
 
-<div style="width:48px;height:5px;background:#ddd;border-radius:999px;margin:0 auto 20px;"></div>
+{{-- <div style="width:48px;height:5px;background:#ddd;border-radius:999px;margin:0 auto 20px;"></div> --}}
 
 <template x-if="detail.logo">
     <img

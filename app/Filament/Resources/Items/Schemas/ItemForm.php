@@ -8,6 +8,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 
 class ItemForm
@@ -44,10 +45,33 @@ class ItemForm
 
                 TextInput::make('name')
                     ->label('Nama Barang')
-                    ->required(),
+                    ->required()
+                    ->placeholder('Contoh: Motor, Laptop, dll.'),
 
                 TextInput::make('brand')
-                    ->label('Merk'),
+                    ->label('Merk')
+                    ->placeholder('Contoh: Honda, Yamaha, Samsung, dll.'),
+
+                // Kolom Seri khusus untuk Peralatan Elektronik
+                TextInput::make('specification.seri') // <--- Otomatis masuk ke JSON 'specification' dengan key 'Seri'
+                    ->label('Seri')
+                    ->placeholder('Contoh: X441U, Ideapad 3, dll.')
+                    ->visible(function (Get $get) {
+                        // Ambil ID atau Nilai dari kategori yang sedang dipilih
+                        $categoryId = $get('category_id');
+
+                        if (! $categoryId) {
+                            return false;
+                        }
+
+                        // Opsi 1: Jika value category_id berupa ID (Angka), cek ke database atau hardcode ID-nya
+                        // Contoh jika ID untuk 'Peralatan Elektronik' adalah 2 (sesuai di screenshot kamu):
+                        return $categoryId == 2;
+
+                        // Opsi 2: Jika relasi ingin lebih dinamis berdasarkan nama kategori (opsional):
+                        // $category = \App\Models\Category::find($categoryId);
+                        // return $category && $category->name === 'Peralatan Elektronik';
+                    }),
 
                 TextInput::make('purchase_price')
                     ->label('Harga Beli')

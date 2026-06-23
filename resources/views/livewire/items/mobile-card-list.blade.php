@@ -4,7 +4,13 @@
     use App\Filament\Resources\Items\ItemResource;
 @endphp
 
-<div>
+<div
+    x-data="{
+        openQr: false,
+        qr: '',
+        name: '',
+    }"
+>
     {{-- Search --}}
     <div style="position:relative; margin-bottom:12px;">
         <div style="position:absolute; left:12px; top:50%; transform:translateY(-50%); pointer-events:none;">
@@ -154,31 +160,48 @@
                      tidak bisa dipanggil dari Livewire component terpisah --}}
                 <a
                     href="{{ ItemResource::getUrl('edit', ['record' => $record]) }}"
-                    style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:11px 0;font-size:11px;font-weight:600;color:#6b7280;text-decoration:none;border-right:1px solid #f3f4f6;"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" style="width:14px;height:14px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                    </svg>
+                    style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:11px 0;font-size:11px;font-weight:600;color:#6b7280;text-decoration:none;border-right:1px solid #f3f4f6;">
+                    
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+	<path d="M0 0h24v24H0z" fill="none" />
+	<g fill="none">
+		<path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
+		<path fill="currentColor" d="M13 3a1 1 0 0 1 .117 1.993L13 5H5v14h14v-8a1 1 0 0 1 1.993-.117L21 11v8a2 2 0 0 1-1.85 1.995L19 21H5a2 2 0 0 1-1.995-1.85L3 19V5a2 2 0 0 1 1.85-1.995L5 3zm6.243.343a1 1 0 0 1 1.497 1.32l-.083.095l-9.9 9.899a1 1 0 0 1-1.497-1.32l.083-.094z" />
+	</g>
+</svg>
                     Edit
                 </a>
 
                 {{-- QR: buka halaman QR tersendiri atau modal --}}
-                <a
-                    {{-- href="{{ route('items.scan') }}/{{ urlencode($record->qr_code ?? '') }}" --}}
-                    href="{{ $record->qr_code }}"
-                    style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:11px 0;font-size:11px;font-weight:600;color:#10b981;text-decoration:none;border-right:1px solid #f3f4f6;"
-                >
+              <button
+    type="button"
+    @click="
+        qr = @js($record->qr_code);
+        name = @js($record->name);
+        openQr = true;
+    "
+    style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:11px 0;font-size:11px;font-weight:600;color:#10b981;background:none;border:none;cursor:pointer;border-right:1px solid #f3f4f6;"
+>
                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
 	<path d="M0 0h24v24H0z" fill="none" />
 	<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm3 12v.01M14 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zM7 7v.01M4 15a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm13-8v.01M14 14h3m3 0v.01M14 14v3m0 3h3m0-3h3m0 0v3" />
 </svg>
-
-
-
                     QR
-                </a>
+</button>
 
+                {{-- Detail: link ke halaman edit sebagai fallback karena modal Filament
+                     tidak bisa dipanggil dari Livewire component terpisah --}}
+
+                <a
+                    href="{{ ItemResource::getUrl('edit', ['record' => $record]) }}"
+                    style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:11px 0;font-size:11px;font-weight:600;color:#6b7280;text-decoration:none;border-right:1px solid #f3f4f6;">
+                    
+                    <svg xmlns="http://www.w3.org/2000/svg" style="width:14px;height:14px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                    Detail
+                </a>
                 {{-- Hapus --}}
                 <button
                     wire:click="deleteRecord({{ $record->id }})"
@@ -205,6 +228,7 @@
             </p>
         </div>
     @endforelse
+    
 
     {{-- Pagination --}}
     @if ($records->hasPages())
@@ -224,4 +248,121 @@
             @endif
         </div>
     @endif
+
+    {{-- @if ($showQrModal)
+    <div
+        style="
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,.5);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            z-index:9999;
+        "
+        wire:click="closeQr"
+    >
+
+        <div
+            wire:click.stop
+            style="
+                width:320px;
+                background:#fff;
+                border-radius:16px;
+                padding:24px;
+                text-align:center;
+            "
+        >
+            <h3 style="font-size:18px;font-weight:600;margin-bottom:16px;">
+                {{ $selectedItemName }}
+            </h3>
+
+            <div style="display:flex;justify-content:center;">
+                {!! QrCode::size(220)->margin(1)->generate($selectedQrCode) !!}
+            </div>
+
+            <p style="margin-top:15px;font-size:12px;color:#6b7280;">
+                {{ $selectedQrCode }}
+            </p>
+
+            <button
+                wire:click="closeQr"
+                style="
+                    margin-top:20px;
+                    width:100%;
+                    padding:10px;
+                    border:none;
+                    border-radius:10px;
+                    background:#10b981;
+                    color:white;
+                    font-weight:600;
+                    cursor:pointer;
+                "
+            >
+                Tutup
+            </button>
+        </div>
+
+    </div>
+@endif --}}
+
+
+<template x-if="openQr">
+    <div
+        x-cloak
+        x-transition.opacity
+        style="
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        "
+        @click="openQr = false"
+    >
+        <div
+            @click.stop
+            style="
+                width: 320px;
+                background: #fff;
+                border-radius: 16px;
+                padding: 24px;
+                text-align: center;
+            "
+        >
+            <h3
+                x-text="name"
+                style="font-size: 18px; font-weight: 600; margin-bottom: 18px;"
+            ></h3>
+
+            <div style="display: flex; justify-content: center;">
+                {!! QrCode::size(220)->margin(1)->generate($record->qr_code) !!}
+            </div>
+
+            <p
+                x-text="qr"
+                style="margin-top: 16px; font-size: 12px; color: #6b7280; word-break: break-all;"
+            ></p>
+
+            <button
+                @click="openQr = false"
+                style="
+                    margin-top: 20px;
+                    width: 100%;
+                    border: none;
+                    border-radius: 10px;
+                    padding: 10px;
+                    background: #10b981;
+                    color: white;
+                    cursor: pointer;
+                    font-weight: 600;
+                "
+            >
+                Tutup
+            </button>
+        </div>
+    </div>
+</template>
 </div>

@@ -11,12 +11,31 @@ class MobileCardList extends Component
     use WithPagination;
 
     public string $activeTab = 'all';
+
     public string $search = '';
 
     protected $paginationTheme = 'simple-bootstrap';
 
     // Sinkronisasi tab dari ListItems (dikirim via event)
     protected $listeners = ['tabChanged' => 'onTabChanged'];
+
+    public bool $showQrModal = false;
+
+    public ?string $selectedQrCode = null;
+
+    public ?string $selectedItemName = null;
+
+    public function showQr(string $qrCode, string $name): void
+    {
+        $this->selectedQrCode = $qrCode;
+        $this->selectedItemName = $name;
+        $this->showQrModal = true;
+    }
+
+    public function closeQr(): void
+    {
+        $this->showQrModal = false;
+    }
 
     public function onTabChanged(string $tab): void
     {
@@ -46,7 +65,7 @@ class MobileCardList extends Component
         if ($this->search) {
             $query->where(function ($q) {
                 $q->where('name', 'like', "%{$this->search}%")
-                  ->orWhere('code', 'like', "%{$this->search}%");
+                    ->orWhere('code', 'like', "%{$this->search}%");
             });
         }
 

@@ -165,7 +165,7 @@
 
                 {{-- QR: buka halaman QR tersendiri atau modal --}}
                 <a
-                    href="{{ route('items.scan-camera') }}?code={{ urlencode($record->qr_code ?? '') }}"
+                    href="{{ route('items.scan') }}/{{ urlencode($record->qr_code ?? '') }}"
                     style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:11px 0;font-size:11px;font-weight:600;color:#10b981;text-decoration:none;border-right:1px solid #f3f4f6;"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" style="width:14px;height:14px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">

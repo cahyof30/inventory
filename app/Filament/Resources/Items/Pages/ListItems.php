@@ -7,6 +7,7 @@ use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\View\View;
 
 class ListItems extends ListRecords
 {
@@ -40,23 +41,30 @@ class ListItems extends ListRecords
     ];
 }
 
- public function getMobileRecords(int $perPage = 15)
+   public function getFooter(): ?View
     {
-        $query = $this->getFilteredTableQuery();
- 
-        // Terapkan search jika ada
-        if ($search = $this->getTableSearch()) {
-            $query->where(function (Builder $q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('code', 'like', "%{$search}%");
-            });
-        }
- 
-        return $query
-            ->with(['category', 'vehicleDetail', 'location', 'company'])
-            ->orderByDesc('created_at')
-            ->paginate($perPage, pageName: 'mobile_page');
+        return view('livewire.items.mobile-card-footer', [
+            'activeTab' => $this->activeTab ?? 'all',
+        ]);
     }
+
+//  public function getMobileRecords(int $perPage = 15)
+//     {
+//         $query = $this->getFilteredTableQuery();
+ 
+//         // Terapkan search jika ada
+//         if ($search = $this->getTableSearch()) {
+//             $query->where(function (Builder $q) use ($search) {
+//                 $q->where('name', 'like', "%{$search}%")
+//                     ->orWhere('code', 'like', "%{$search}%");
+//             });
+//         }
+ 
+//         return $query
+//             ->with(['category', 'vehicleDetail', 'location', 'company'])
+//             ->orderByDesc('created_at')
+//             ->paginate($perPage, pageName: 'mobile_page');
+//     }
  
     /**
      * Expose search value ke view.
@@ -65,5 +73,7 @@ class ListItems extends ListRecords
     {
         return $this->tableSearch ?? null;
     }
+
+    
 }
 

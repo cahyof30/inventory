@@ -6,12 +6,18 @@ use App\Filament\Resources\Items\ItemResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListItems extends ListRecords
 {
     protected static string $resource = ItemResource::class;
+
+    protected function isMobile(): bool
+    {
+        return request()->header('User-Agent')
+            && preg_match('/Mobile|Android|iPhone|iPad/i', request()->userAgent());
+    }
 
     //  protected string $view = 'filament.pages.list-items';
 
@@ -23,49 +29,54 @@ class ListItems extends ListRecords
     }
 
     public function getTabs(): array
-{
-    return [
-        'all' => Tab::make('Semua Data'),
-        
-        'kendaraan' => Tab::make('Kendaraan')
-            ->modifyQueryUsing(fn (Builder $query) => $query->whereHas('category', function ($q) {
-                $q->where('slug', 'kendaraan');
-            }))
-            ->icon('heroicon-m-truck'),
+    {
 
-        'peralatan' => Tab::make('Peralatan')
-            ->modifyQueryUsing(fn (Builder $query) => $query->whereHas('category', function ($q) {
-                $q->where('slug', '!=', 'kendaraan');
-            }))
-            ->icon('heroicon-m-tv'),
-    ];
-}
+        if ($this->isMobile()) {
+            return [];
+        }
 
-   public function getFooter(): ?View
+        return [
+            'all' => Tab::make('Semua Data'),
+
+            'kendaraan' => Tab::make('Kendaraan')
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereHas('category', function ($q) {
+                    $q->where('slug', 'kendaraan');
+                }))
+                ->icon('heroicon-m-truck'),
+
+            'peralatan' => Tab::make('Peralatan')
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereHas('category', function ($q) {
+                    $q->where('slug', '!=', 'kendaraan');
+                }))
+                ->icon('heroicon-m-tv'),
+        ];
+    }
+
+    public function getFooter(): ?View
     {
         return view('livewire.items.mobile-card-footer', [
             'activeTab' => $this->activeTab ?? 'all',
         ]);
     }
 
-//  public function getMobileRecords(int $perPage = 15)
-//     {
-//         $query = $this->getFilteredTableQuery();
- 
-//         // Terapkan search jika ada
-//         if ($search = $this->getTableSearch()) {
-//             $query->where(function (Builder $q) use ($search) {
-//                 $q->where('name', 'like', "%{$search}%")
-//                     ->orWhere('code', 'like', "%{$search}%");
-//             });
-//         }
- 
-//         return $query
-//             ->with(['category', 'vehicleDetail', 'location', 'company'])
-//             ->orderByDesc('created_at')
-//             ->paginate($perPage, pageName: 'mobile_page');
-//     }
- 
+    //  public function getMobileRecords(int $perPage = 15)
+    //     {
+    //         $query = $this->getFilteredTableQuery();
+
+    //         // Terapkan search jika ada
+    //         if ($search = $this->getTableSearch()) {
+    //             $query->where(function (Builder $q) use ($search) {
+    //                 $q->where('name', 'like', "%{$search}%")
+    //                     ->orWhere('code', 'like', "%{$search}%");
+    //             });
+    //         }
+
+    //         return $query
+    //             ->with(['category', 'vehicleDetail', 'location', 'company'])
+    //             ->orderByDesc('created_at')
+    //             ->paginate($perPage, pageName: 'mobile_page');
+    //     }
+
     /**
      * Expose search value ke view.
      */
@@ -73,7 +84,4 @@ class ListItems extends ListRecords
     {
         return $this->tableSearch ?? null;
     }
-
-    
 }
-

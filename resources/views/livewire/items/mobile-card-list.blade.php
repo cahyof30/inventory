@@ -134,11 +134,11 @@
                             </span>
                         @endif
 
-                        @if ($record->brand)
+                        {{-- @if ($record->brand)
                             <span style="border-radius:999px;padding:2px 8px;font-size:10px;font-weight:500;background:#f3f4f6;color:#6b7280;">
                                 {{ $record->brand }}
                             </span>
-                        @endif
+                        @endif --}}
 
                         @if ($record->location)
                             <span style="display:inline-flex;align-items:center;gap:3px;border-radius:999px;padding:2px 8px;font-size:10px;font-weight:500;background:#fef3c7;color:#92400e;">

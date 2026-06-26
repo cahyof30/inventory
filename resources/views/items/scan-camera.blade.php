@@ -440,7 +440,7 @@
     <div class="header-ray"></div>
     <div class="header-inner">
         <div class="header-logo-ring">
-            <img src="{{ asset('images/icon-sgm.png') }}" alt="Logo SGM" />
+            <img src="{{ asset('storage/company-logos/logo-sgm.png') }}" alt="Logo SGM" />
         </div>
         <div>
             <div class="header-brand-name">PT. Sentra Gemilang Mulia</div>

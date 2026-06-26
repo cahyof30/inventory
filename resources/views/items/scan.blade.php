@@ -640,9 +640,9 @@
 
             <div class="data-row">
                 <div class="data-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
+                     <svg viewBox="0 0 24 24" fill="none" stroke="#D94F00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
                 </div>
                 <div>
                         <div class="data-label">Kondisi</div>
@@ -732,15 +732,7 @@
                     </div>
                 </div>
 
-                <div class="data-row" style="border-bottom:none;">
-                    <div class="data-icon" style="background:rgba(217,79,0,0.08);">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#D94F00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
-                        </svg>
-                    </div>
-                    
-                </div>
-
+                
             </div>{{-- /accordion-data-section --}}
         </div>{{-- /accordion-body --}}
 

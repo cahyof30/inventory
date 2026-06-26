@@ -89,7 +89,7 @@ class ItemController extends Controller
 
         if (! $item) {
 
-            BanService::failed($ip);
+            // BanService::failed($ip);
 
             return back()
                 ->withInput()

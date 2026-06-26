@@ -131,7 +131,7 @@ body{
             <td class="info-cell">
 
                 <div class="item-name">
-                    {{ Str::limit($item->name,40) }}
+                    {{ Str::limit($item->name,40) }} {{ $item->brand }}
                 </div>
 
                 <div class="item-code">

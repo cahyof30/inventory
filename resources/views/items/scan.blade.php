@@ -610,7 +610,7 @@
                 </div>
                 <div>
                     <div class="data-label">Nama Barang</div>
-                    <div class="data-value">{{ $item->name }}</div>
+                    <div class="data-value">{{ $item->name }} {{ $item->brand ?? '' }}</div>
                 </div>
             </div>
 
@@ -645,12 +645,13 @@
                     </svg>
                 </div>
                 <div>
-                    <div class="data-label">Status</div>
-                    <span class="badge-verified">
-                        <svg width="10" height="10" viewBox="0 0 12 12" fill="currentColor"><path d="M10 2.5L4.5 8 2 5.5"/></svg>
-                        Verified
-                    </span>
-                </div>
+                        <div class="data-label">Kondisi</div>
+                        @if ($item->condition == 'good')
+                            <span class="badge-verified badge-good">Baik</span>
+                        @elseif ($item->condition == 'broken')
+                            <span class="badge-verified badge-broken">Rusak</span>
+                        @endif
+                    </div>
             </div>
 
         </div>{{-- /data-section --}}
@@ -726,8 +727,8 @@
                         </svg>
                     </div>
                     <div>
-                        <div class="data-label">Merek</div>
-                        <div class="data-value">{{ $item->brand ?? '-' }}</div>
+                        <div class="data-label">Seri</div>
+                        <div class="data-value">{{ $item->specification['seri'] ?? '-' }}</div>
                     </div>
                 </div>
 
@@ -737,14 +738,7 @@
                             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
                         </svg>
                     </div>
-                    <div>
-                        <div class="data-label">Kondisi</div>
-                        @if ($item->condition == 'good')
-                            <span class="badge-verified badge-good">Baik</span>
-                        @elseif ($item->condition == 'broken')
-                            <span class="badge-verified badge-broken">Rusak</span>
-                        @endif
-                    </div>
+                    
                 </div>
 
             </div>{{-- /accordion-data-section --}}

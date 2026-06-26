@@ -62,17 +62,17 @@ class ItemController extends Controller
     {
         $ip = $request->ip();
 
-        if (BanService::isBanned($ip)) {
-            return back()->withErrors([
-                'code' => 'IP Anda diblokir sementara.',
-            ]);
-        }
+        // if (BanService::isBanned($ip)) {
+        //     return back()->withErrors([
+        //         'code' => 'IP Anda diblokir sementara.',
+        //     ]);
+        // }
 
-        if (! RateLimitService::check($ip)) {
-            return back()->withErrors([
-                'code' => 'Terlalu banyak permintaan.',
-            ]);
-        }
+        // if (! RateLimitService::check($ip)) {
+        //     return back()->withErrors([
+        //         'code' => 'Terlalu banyak permintaan.',
+        //     ]);
+        // }
 
         if (! RecaptchaService::verify($request->recaptchaToken)) {
 

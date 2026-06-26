@@ -98,7 +98,7 @@ class ItemController extends Controller
                 ]);
         }
 
-        BanService::success($ip);
+        // BanService::success($ip);
 
         return redirect()->route('items.scan', $item->public_uuid);
     }

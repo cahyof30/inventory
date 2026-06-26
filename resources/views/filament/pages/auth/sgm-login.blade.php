@@ -370,7 +370,7 @@ a.fi-link:hover {
     {{-- ── BRAND HEADER ── --}}
     <div class="sgm-brand">
         <div class="sgm-logo-ring">
-            <img src="{{ asset('images/icon-sgm.png') }}" alt="Logo PT. Sentra Gemilang Mulia" />
+            <img src="{{ asset('storage/company-logos/logo-sgm.png') }}" alt="Logo PT. Sentra Gemilang Mulia" />
         </div>
         <div class="sgm-company-name">PT. Sentra Gemilang Mulia</div>
         <div class="sgm-company-sub">SGM Group</div>

@@ -408,7 +408,7 @@
         <div class="cta-grid" role="list">
 
             <!-- SCAN QR -->
-            <a href="#" class="cta-card cta-card--scan" role="listitem" aria-label="Scan QR Code aset">
+            <a href="{{ route('items.scan-camera') }}" class="cta-card cta-card--scan" role="listitem" aria-label="Scan QR Code aset">
                 <div class="cta-icon-wrap">
                     <div class="cta-icon cta-icon--scan">
                         <!-- QR scan icon -->

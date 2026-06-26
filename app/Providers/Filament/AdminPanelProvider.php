@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Auth\Login as SGMLogin; 
 use App\Filament\Pages\Dashboard;
 use App\Filament\Widgets\ItemConditionChart;
 use App\Filament\Widgets\QuickActions;
@@ -32,7 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
 
-            ->login()
+           ->login(SGMLogin::class)
             ->colors([
                 'primary' => Color::Amber,
             ])

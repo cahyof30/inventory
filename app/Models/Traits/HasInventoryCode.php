@@ -2,46 +2,70 @@
 
 namespace App\Models\Traits;
 
-use Milon\Barcode\DNS1D;
+use App\Models\Company;
+use App\Models\ItemCategory;
+use App\Models\Location;
+use App\Models\LocationCategory;
 
 trait HasInventoryCode
 {
-    protected static function bootHasInventoryCode(): void
-    {
-        static::creating(function ($model) {
-            $model->generateInventoryCode();
-        });
-
-        // static::updating(function ($model) {
-
-        //     if ($model->isDirty(['company_id', 'category_id', 'purchase_date'])) {
-        //         $model->rebuildInventoryCode();
-        //     }
-        // });
-    }
-
-    /**
-     * Generate full code (only for creating)
-     */
     public function generateInventoryCode(): void
     {
-        $companySlug = $this->company->slug ?? 'UNK';
-        $categoryCode = $this->category->code ?? 'UNK';
-        $year = $this->purchase_date
-            ? date('Y', strtotime($this->purchase_date))
+        // dd($this);
+        $company = Company::find($this->company_id);
+        $category = ItemCategory::find($this->category_id);
+        $location = Location::with('locationCategory')
+            ->find($this->location_id);
+
+        $locationCode = $location?->locationCategory?->code;
+
+        if (! $locationCode && ! empty($this->location_category_code)) {
+            $locationCode = $this->location_category_code;
+        }
+
+        $locationCode ??= 'UNK';
+
+        $companySlug  = $company->slug ?? 'UNK';
+        $categoryCode = $category->code ?? 'UNK';
+        $year = $this->created_at
+            ? date('Y', strtotime($this->created_at))
             : date('Y');
 
-        $prefix = "{$companySlug}-{$categoryCode}-{$year}";
+//             // Sementara di HasInventoryCode, setelah baris $locationCode ??= 'UNK';
+// dd([
+//     'location_id'             => $this->location_id,
+//     'location_from_db'        => $location?->name,
+//     'locationCategory_code'   => $location?->locationCategory?->code,
+//     'location_category_code'  => $this->location_category_code,
+//     'final_locationCode'      => $locationCode,
+// ]);
+        // Format prefix
+        if ($category?->code === 'KD') {
+            // Format: COMPANY-KD-2026
+            $prefix = "{$companySlug}-{$categoryCode}-{$year}";
+        } elseif ($locationCode === 'V') {
+            $prefix = "{$companySlug}-{$locationCode}-{$year}";
+        } else {
+            // Format: COMPANY-PE-I-2026
+            $prefix = "{$companySlug}-{$categoryCode}-{$locationCode}-{$year}";
+        }
 
         $last = static::where('company_id', $this->company_id)
             ->where('category_id', $this->category_id)
-            ->where('code', 'like', "{$prefix}%")
+            ->where('code', 'like', "{$prefix}-%")
             ->latest('id')
             ->first();
 
-        $number = $last ? ((int) substr($last->code, -5)) + 1 : 1;
+        if ($last) {
+            $parts = explode('-', $last->code);
+            $number = (int) end($parts) + 1;
+        } else {
+            $number = 1;
+        }
 
-        $this->code = $prefix.str_pad($number, 5, '0', STR_PAD_LEFT);
+        $number = str_pad($number, 2, '0', STR_PAD_LEFT);
+
+        $this->code = "{$prefix}-{$number}";
     }
 
     /**
@@ -68,32 +92,4 @@ trait HasInventoryCode
 
         $this->code = $prefix.$sequence;
     }
-
-    // public function getBarcodeBase64Attribute(): string
-    // {
-    //     if (! $this->code) {
-    //         return '';
-    //     }
-
-    //     $dns = new DNS1D;
-    //     $dns->setStorPath(storage_path('framework/barcode/'));
-
-    //     return $dns->getBarcodePNG($this->code, 'C128');
-    // }
-//     public function getBarcodeBase64Attribute(): string
-// {
-//     if (!$this->code) {
-//         return '';
-//     }
-
-//     $dns = new DNS1D();
-//     $dns->setStorPath(storage_path('framework/barcode/'));
-
-//     return $dns->getBarcodePNG(
-//         $this->code,
-//         'C128',
-//         3,   // scale (lebar garis)
-//         80   // height (tinggi barcode)
-//     );
-// }
 }

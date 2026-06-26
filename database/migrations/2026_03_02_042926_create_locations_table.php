@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
+            $table->string('parent_id')->nullable();
+            $table->foreignId('location_category_id')->nullable()->constrained('location_categories')->nullOnDelete();
             $table->string('slug')->unique();
             $table->string('name');
             $table->timestamps();

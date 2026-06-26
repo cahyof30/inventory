@@ -356,7 +356,11 @@
             ></h3>
 
             <div style="display: flex; justify-content: center;">
-                {!! QrCode::size(220)->margin(1)->generate($record->qr_code) !!}
+                <img
+                    :src="`https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=10&data=${encodeURIComponent(qr)}`"
+                    alt="QR Code"
+                    style="width:220px;height:220px;"
+                />
             </div>
 
             <p

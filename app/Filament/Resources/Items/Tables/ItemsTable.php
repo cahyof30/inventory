@@ -19,7 +19,9 @@ use Filament\Support\Enums\Alignment;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -56,7 +58,7 @@ class ItemsTable
                 TextColumn::make('name')
                     ->label('Nama / Kode')
                     ->description(fn ($record) => $record->code)
-                    ->searchable(['name', 'code']), // Membuat kolom ini bisa dicari berdasarkan nama ATAU kode
+                    ->searchable(['name', 'code']),
                 TextColumn::make('brand')
                     ->searchable(),
                 TextColumn::make('purchase_price')
@@ -90,24 +92,25 @@ class ItemsTable
                             $filePath = Storage::disk('public')->path($data['file']);
 
                             try {
-                                Excel::import(new ItemVehicleImport, $filePath);
+                                $import = new ItemVehicleImport;
+                                Excel::import($import, $filePath);
 
-                                // Hapus file sementara
                                 Storage::disk('public')->delete($data['file']);
 
-                                Notification::make()
-                                    ->title('Import Berhasil')
-                                    ->success()
-                                    ->send();
+                                static::sendImportNotification(
+                                    $import->successCount,
+                                    $import->failures
+                                );
                             } catch (\Exception $e) {
                                 Notification::make()
-                                    ->title('Import Gagal')
+                                    ->title('Import Gagal Total')
                                     ->body($e->getMessage())
                                     ->danger()
                                     ->persistent()
                                     ->send();
                             }
                         }),
+
                     Action::make('import_peralatan')
                         ->label('Import Excel (Peralatan)')
                         ->icon('heroicon-o-tv')
@@ -123,18 +126,18 @@ class ItemsTable
                             $filePath = Storage::disk('public')->path($data['file']);
 
                             try {
-                                Excel::import(new ItemImport, $filePath);
+                                $import = new ItemImport;
+                                Excel::import($import, $filePath);
 
-                                // Hapus file sementara
                                 Storage::disk('public')->delete($data['file']);
 
-                                Notification::make()
-                                    ->title('Import Berhasil')
-                                    ->success()
-                                    ->send();
+                                static::sendImportNotification(
+                                    $import->successCount,
+                                    $import->failures
+                                );
                             } catch (\Exception $e) {
                                 Notification::make()
-                                    ->title('Import Gagal')
+                                    ->title('Import Gagal Total')
                                     ->body($e->getMessage())
                                     ->danger()
                                     ->persistent()
@@ -199,6 +202,7 @@ class ItemsTable
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('success')
                     ->button(),
+
                 Action::make('scan_qr')
                     ->label('Scan QR')
                     ->icon('heroicon-o-qr-code')
@@ -206,7 +210,29 @@ class ItemsTable
                     ->url(route('items.scan-camera')),
             ])
             ->filters([
-                //
+                SelectFilter::make('category_id')
+                    ->label('Kategori')
+                    ->relationship('category', 'name')
+                    ->searchable()
+                    ->preload(),
+                SelectFilter::make('location_category')
+                    ->label('Kategori Lokasi')
+                    ->options([
+                        'I' => 'Kantor',
+                        'G' => 'Gudang',
+                        'V' => 'Kandang',
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+
+                        if (blank($data['value'])) {
+                            return $query;
+                        }
+
+                        return $query->whereHas(
+                            'location.locationCategory',
+                            fn (Builder $q) => $q->where('code', $data['value'])
+                        );
+                    }),
             ])
             ->recordAction('detailItem')
             ->recordActions([
@@ -226,35 +252,27 @@ class ItemsTable
                     // 1. Tombol Edit
                     EditAction::make(),
 
-                    // 2. Tombol Lihat Barcode (Modal)
+                    // 2. Tombol Lihat QR Code (Modal)
                     Action::make('view_qr')
                         ->label('QR Code')
                         ->icon('heroicon-o-qr-code')
                         ->color('success')
                         ->modalHeading('QR Code Asset')
-                        ->modalWidth('md') // Membatasi lebar modal supaya pas dengan QR Code
-                        ->modalAlignment(Alignment::Center) // Memastikan konten modal berada di tengah
-                        ->modalCancelActionLabel('Tutup') // Tombol tutup bawaan Filament
-                        ->modalSubmitAction(false) // Menyembunyikan tombol submit (Save)
+                        ->modalWidth('md')
+                        ->modalAlignment(Alignment::Center)
+                        ->modalCancelActionLabel('Tutup')
+                        ->modalSubmitAction(false)
                         ->modalContent(fn ($record) => view(
                             'filament.components.qr-code',
-                            ['state' => $record->qr_code] // Pastikan variabel '$record->code' sesuai dengan data Anda
+                            ['state' => $record->qr_code]
                         )),
-                    // Action::make('printSticker')
-                    //     ->label('Cetak Stiker')
-                    //     ->icon('heroicon-o-printer')
-                    //     ->color('success')
-                    //     ->url(fn ($record) => route(
-                    //         'items.print-single-sticker',
-                    //         $record
-                    //     ))
-                    //     ->openUrlInNewTab(),
+
                     // 3. Tombol Hapus
                     DeleteAction::make(),
                 ])
-                    ->label('Opsi') // Nama tombol utama
-                    ->icon('heroicon-m-ellipsis-vertical') // Ikon titik tiga vertikal
-                    ->color('gray') // Warna tombol grup
+                    ->label('Opsi')
+                    ->icon('heroicon-m-ellipsis-vertical')
+                    ->color('gray')
                     ->button(),
             ])
             ->toolbarActions([
@@ -348,5 +366,77 @@ class ItemsTable
                         }),
                 ]),
             ]);
+    }
+
+    // -------------------------------------------------------------------------
+    // Helper: Kirim notifikasi ringkasan import
+    // -------------------------------------------------------------------------
+
+    protected static function sendImportNotification(int $successCount, array $failures): void
+    {
+        $failCount = count($failures);
+
+        if ($failCount === 0) {
+            // Semua berhasil
+            Notification::make()
+                ->title('Import Berhasil')
+                ->body("{$successCount} data berhasil diimport.")
+                ->success()
+                ->send();
+
+            return;
+        }
+
+        if ($successCount === 0) {
+            // Semua gagal
+            $body = static::buildFailureList($failures);
+
+            Notification::make()
+                ->title("Import Gagal — {$failCount} baris bermasalah")
+                ->body($body)
+                ->danger()
+                ->persistent()
+                ->send();
+
+            return;
+        }
+
+        // Sebagian berhasil, sebagian gagal — kirim 2 notifikasi
+        Notification::make()
+            ->title('Import Selesai (Sebagian)')
+            ->body("{$successCount} data berhasil diimport.")
+            ->success()
+            ->send();
+
+        $body = static::buildFailureList($failures);
+
+        Notification::make()
+            ->title("{$failCount} baris gagal diimport")
+            ->body($body)
+            ->warning()
+            ->persistent()
+            ->send();
+    }
+
+    /**
+     * Buat ringkasan teks dari daftar kegagalan.
+     * Ditampilkan maksimal 10 baris pertama agar notifikasi tidak terlalu panjang.
+     */
+    protected static function buildFailureList(array $failures): string
+    {
+        $lines = [];
+
+        foreach (array_slice($failures, 0, 10) as $f) {
+            $lines[] = "• Baris {$f['row']} ({$f['name']}): {$f['reason']}";
+        }
+
+        $body = implode("\n", $lines);
+
+        $remaining = count($failures) - count(array_slice($failures, 0, 10));
+        if ($remaining > 0) {
+            $body .= "\n• ... dan {$remaining} baris lainnya.";
+        }
+
+        return $body;
     }
 }

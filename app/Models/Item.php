@@ -21,6 +21,7 @@ class Item extends Model
         'purchase_price',
         'purchase_date',
         'condition',
+        'pic_id',
         'image',
         'qr_code',
         'location_id',
@@ -31,8 +32,11 @@ class Item extends Model
     public $timestamps = true;
 
     protected $casts = [
+        'purchase_date' => 'date', // atau 'datetime'
         'specification' => 'array',
     ];
+
+    public ?string $location_category_code = null;
 
     public function getQrUrlAttribute(): string
     {
@@ -55,50 +59,31 @@ class Item extends Model
 
     }
 
+    public bool $preserveCode = false;
 
     protected static function booted(): void
     {
         static::creating(function (Item $item) {
-            // 1. Generate atau Update Kode Inventaris jika ada perubahan input
+        // dd($item->getAttributes());
+            // Generate code hanya jika belum ada
+            if (blank($item->code)) {
                 $item->generateInventoryCode();
-            // Generate UUID publik
-            if (empty($item->public_uuid)) {
-                $item->public_uuid = Str::uuid();
             }
 
-            // Isi QR
-            if ($item->public_uuid) {
-                $item->qr_code = route(
-                    'asset.public',
-                    $item->public_uuid
-                );
+            // Generate UUID publik jika belum ada
+            if (blank($item->public_uuid)) {
+                $item->public_uuid = (string) Str::uuid();
             }
 
-            // 2. Isi qr_code hanya dengan string kode saja
-            // if ($item->code) {
-            //     $item->qr_code = $item->code;
-            // }
+            // QR URL mengikuti public_uuid
+            if (blank($item->qr_code)) {
+                $item->qr_code = $item->public_uuid;
+                // $item->qr_code = route('asset.public', $item->public_uuid);
+            }
+
+            // Generate file QR
             $item->generateQr();
         });
-
-         static::updating(function (Item $item) {
-
-        if ($item->isDirty([
-            'company_id',
-            'category_id',
-            'purchase_date'
-        ])) {
-
-            $item->generateInventoryCode();
-        }
-    });
-        //     static::creating(function (Item $item) {
-        //         $item->generateQr();
-        //     });
-
-        //     static::updating(function (Item $item) {
-        //         $item->generateQr();
-        //     });
     }
 
     public function category()
@@ -134,5 +119,10 @@ class Item extends Model
     public function vehicleDetail()
     {
         return $this->hasOne(VehicleDetail::class, 'item_id');
+    }
+
+    public function pic()
+    {
+        return $this->belongsTo(User::class, 'pic_id');
     }
 }

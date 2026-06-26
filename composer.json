@@ -16,6 +16,7 @@
         "laravel/tinker": "^2.10.1",
         "pxlrbt/filament-excel": "^3.6",
         "simplesoftwareio/simple-qrcode": "^4.2",
+        "spatie/laravel-permission": "^8.0",
         "torgodly/html2media": "^2.1"
     },
     "require-dev": {

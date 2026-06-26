@@ -18,6 +18,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->enum('role', ['ga', 'staf'])->default('staf');
+            $table->string('position')->nullable();
+           $table->foreignId('division_id')->nullable()->constrained('divisions')->onDelete('set null');
             $table->rememberToken();
             $table->timestamps();
         });

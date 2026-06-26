@@ -1,6 +1,7 @@
 <?php
 namespace App\Exports;
 
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithDrawings;
@@ -38,9 +39,12 @@ class ItemVehicleExport implements FromCollection, WithHeadings, WithDrawings, W
             $item->category?->name,
             $item->name,
             $item->brand,
+            $item->specification['seri'] ?? '-',
+            $item->pic?->name ?? '-',
             $item->vehicleDetail?->license_plate ?? '-',
             $item->location?->name,
             $item->purchase_price,
+            $item->purchase_date ? Carbon::parse($item->purchase_date)->format('d-m-Y') : '-',
             match ($item->condition) {
                 'good' => 'Baik',
                 'broken' => 'Rusak',
@@ -53,7 +57,7 @@ class ItemVehicleExport implements FromCollection, WithHeadings, WithDrawings, W
 
     public function headings(): array
     {
-        return ['UUID (Kode Unik)','Kode', 'Perusahaan','Kategori', 'Nama Barang', 'Merk',  'No. Polisi', 'Lokasi', 'Harga (IDR)', 'Kondisi', 
+        return ['UUID (Kode Unik)','Kode', 'Perusahaan','Kategori', 'Nama Barang', 'Merk', 'Seri', 'PIC',  'No. Polisi', 'Lokasi', 'Harga (IDR)', 'Tanggal Beli','Kondisi', 
         // 'QR Code', 'Barcode'
         ];
     }
@@ -136,16 +140,16 @@ class ItemVehicleExport implements FromCollection, WithHeadings, WithDrawings, W
     $highestColumn = $sheet->getHighestColumn(); // Biasanya 'G'
 
     // 1. Set Tinggi Baris (Data)
-    for ($i = 2; $i <= $highestRow; $i++) {
-        $sheet->getRowDimension($i)->setRowHeight(70);
-    }
+    // for ($i = 2; $i <= $highestRow; $i++) {
+    //     $sheet->getRowDimension($i)->setRowHeight(70);
+    // }
 
     // 2. Set Lebar Kolom G (QR) secara manual
-    $sheet->getColumnDimension('J')->setAutoSize(false);
-    $sheet->getColumnDimension('J')->setWidth(10);
+    // $sheet->getColumnDimension('J')->setAutoSize(false);
+    // $sheet->getColumnDimension('J')->setWidth(10);
     // 2. Set Lebar Kolom G (QR) secara manual
-    $sheet->getColumnDimension('K')->setAutoSize(false);
-    $sheet->getColumnDimension('K')->setWidth(40);
+    // $sheet->getColumnDimension('K')->setAutoSize(false);
+    // $sheet->getColumnDimension('K')->setWidth(40);
     // 3. Styling Header & Perataan Tengah (Vertical Alignment)
     return [
         // Header: Bold & Center
@@ -169,7 +173,7 @@ class ItemVehicleExport implements FromCollection, WithHeadings, WithDrawings, W
     public function columnFormats(): array  
     {
         return [
-            'E' => '#,##0',
+            'K' => '#,##0',
         ];
     }
 }

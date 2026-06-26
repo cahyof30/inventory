@@ -7,7 +7,9 @@ use App\Http\Controllers\PngController;
 use App\Http\Controllers\PublicAssetController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+Route::get('/', fn() => view('welcome'))->name('home');
+
+Route::get('/login', function () {
     return redirect()->to('/admin/login');
 });
 

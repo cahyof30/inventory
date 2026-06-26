@@ -55,7 +55,17 @@ class ItemForm
                 // Kolom Seri khusus untuk Peralatan Elektronik
                 TextInput::make('specification.seri') // <--- Otomatis masuk ke JSON 'specification' dengan key 'Seri'
                     ->label('Seri')
-                    ->placeholder('Contoh: X441U, Ideapad 3, dll.')
+                    ->placeholder(function (Get $get) {
+                        $categoryId = $get('category_id');
+
+                        // Jika kategori = 1 (Misal: Kendaraan)
+                        if ($categoryId == 1) { 
+                            return 'Vario, Beat, Aerox';
+                        }
+
+                        // Jika kategori = 2 (Misal: Peralatan Elektronik / Default)
+                        return 'Contoh: X441U, Ideapad 3, dll.';
+                    })
                     ->visible(function (Get $get) {
                         // Ambil ID atau Nilai dari kategori yang sedang dipilih
                         $categoryId = $get('category_id');
@@ -66,11 +76,76 @@ class ItemForm
 
                         // Opsi 1: Jika value category_id berupa ID (Angka), cek ke database atau hardcode ID-nya
                         // Contoh jika ID untuk 'Peralatan Elektronik' adalah 2 (sesuai di screenshot kamu):
-                        return $categoryId == 2;
+                        return in_array($categoryId, [1, 2]);
 
                         // Opsi 2: Jika relasi ingin lebih dinamis berdasarkan nama kategori (opsional):
                         // $category = \App\Models\Category::find($categoryId);
                         // return $category && $category->name === 'Peralatan Elektronik';
+                    }),
+
+                TextInput::make('vehicleDetail.color') // <--- Otomatis masuk ke JSON 'specification' dengan key 'Seri'
+                    ->label('Warna')
+                    ->placeholder('Contoh: Hitam / Merah')
+                    ->visible(function (Get $get) {
+                        // Ambil ID atau Nilai dari kategori yang sedang dipilih
+                        $categoryId = $get('category_id');
+
+                        if (! $categoryId) {
+                            return false;
+                        }
+
+                        // Opsi 1: Jika value category_id berupa ID (Angka), cek ke database atau hardcode ID-nya
+                        // Contoh jika ID untuk 'Peralatan Elektronik' adalah 2 (sesuai di screenshot kamu):
+                        return $categoryId == 1;
+
+                        // Opsi 2: Jika relasi ingin lebih dinamis berdasarkan nama kategori (opsional):
+                        // $category = \App\Models\Category::find($categoryId);
+                        // return $category && $category->name === 'Peralatan Elektronik';
+                    }),
+
+                Select::make('pic_id')
+                    ->label('PIC (Penanggung jawab)')
+                    ->relationship(
+                        name: 'pic',
+                        titleAttribute: 'name',
+                        // Filter langsung ke kolom 'role' yang ada di tabel users
+                        modifyQueryUsing: fn ($query) => $query
+                            ->with('division') // Tetap eager load divisi untuk mengambil JSON styles
+                            ->where('role', 'staf') // Hanya menampilkan user yang kolom role-nya berisi 'staf'
+                            ->orderBy('name', 'asc')
+                    )
+                    ->searchable(['name', 'short_name'])
+                    ->preload()
+                    ->live()
+                    ->allowHtml()
+                    ->getOptionLabelFromRecordUsing(function ($record) {
+                        // 1. Ambil data JSON styles dari relasi divisi si User
+                        $styles = $record->division?->styles;
+
+                        // 2. Tentukan fallback jika data JSON di DB kosong/null
+                        $bgColor = $styles['bg_color'] ?? '#f1f5f9';
+                        $textColor = $styles['text_color'] ?? '#475569';
+                        $borderColor = $styles['border_color'] ?? '#e2e8f0';
+
+                        // 3. Satukan menjadi string inline CSS
+                        $badgeStyle = "background-color: {$bgColor}; color: {$textColor}; border: 1px solid {$borderColor};";
+
+                        return "
+            <div style='display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 8px;'>
+                <span style='font-weight: 500; color: #111827;'>{$record->name}</span>
+                <span style='
+                    display: inline-flex; 
+                    align-items: center; 
+                    padding: 2px 8px; 
+                    border-radius: 4px; 
+                    font-size: 11px; 
+                    font-weight: 600; 
+                    {$badgeStyle}
+                '>
+                    ".($record->position ?? '-').'
+                </span>
+            </div>
+        ';
                     }),
 
                 TextInput::make('purchase_price')

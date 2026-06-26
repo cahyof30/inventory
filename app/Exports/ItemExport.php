@@ -1,6 +1,7 @@
 <?php
 namespace App\Exports;
 
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithDrawings;
@@ -10,10 +11,11 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Milon\Barcode\DNS1D;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use \Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
 
 // 1. Tambahkan ShouldAutoSize di sini
-class ItemExport implements FromCollection, WithHeadings, WithDrawings, WithMapping, WithColumnFormatting, WithStyles, \Maatwebsite\Excel\Concerns\ShouldAutoSize
+class ItemExport implements FromCollection, WithHeadings, WithDrawings, WithMapping, WithColumnFormatting, WithStyles, ShouldAutoSize
 {
     protected $records;
 
@@ -38,8 +40,12 @@ class ItemExport implements FromCollection, WithHeadings, WithDrawings, WithMapp
             $item->category?->name,
             $item->name,
             $item->brand,
+            $item->specification['seri'] ?? '-',
+            $item->pic?->name ?? '-',
+            // $item->location?->locationCategory?->name,
             $item->location?->name,
             $item->purchase_price,
+            $item->purchase_date ? Carbon::parse($item->purchase_date)->format('d-m-Y') : '-',
             match ($item->condition) {
                 'good' => 'Baik',
                 'broken' => 'Rusak',
@@ -52,7 +58,7 @@ class ItemExport implements FromCollection, WithHeadings, WithDrawings, WithMapp
 
     public function headings(): array
     {
-        return ['UUID (Kode Unik)', 'Kode', 'Perusahaan','Kategori', 'Nama Barang', 'Merk',  'Lokasi', 'Harga (IDR)', 'Kondisi', 
+        return ['UUID Kode Unik', 'Kode', 'Perusahaan','Kategori', 'Nama Barang', 'Merk', 'Seri', 'PIC', 'Lokasi', 'Harga (IDR)', 'Tanggal_Beli', 'Kondisi', 'Deskripsi'
         // 'QR Code', 'Barcode'
         ];
     }
@@ -135,16 +141,16 @@ class ItemExport implements FromCollection, WithHeadings, WithDrawings, WithMapp
     $highestColumn = $sheet->getHighestColumn(); // Biasanya 'G'
 
     // 1. Set Tinggi Baris (Data)
-    for ($i = 2; $i <= $highestRow; $i++) {
-        $sheet->getRowDimension($i)->setRowHeight(70);
-    }
+    // for ($i = 2; $i <= $highestRow; $i++) {
+    //     $sheet->getRowDimension($i)->setRowHeight(70);
+    // }
 
     // 2. Set Lebar Kolom G (QR) secara manual
-    $sheet->getColumnDimension('I')->setAutoSize(false);
-    $sheet->getColumnDimension('I')->setWidth(10);
+    // $sheet->getColumnDimension('I')->setAutoSize(false);
+    // $sheet->getColumnDimension('I')->setWidth(10);
     // 2. Set Lebar Kolom G (QR) secara manual
-    $sheet->getColumnDimension('J')->setAutoSize(false);
-    $sheet->getColumnDimension('J')->setWidth(40);
+    // $sheet->getColumnDimension('J')->setAutoSize(false);
+    // $sheet->getColumnDimension('J')->setWidth(40);
 
     // 3. Styling Header & Perataan Tengah (Vertical Alignment)
     return [
@@ -166,10 +172,10 @@ class ItemExport implements FromCollection, WithHeadings, WithDrawings, WithMapp
 }
 
 
-    public function columnFormats(): array  
+    public function columnFormats(): array 
     {
         return [
-            'E' => '#,##0',
+            'J' => '#,##0',
         ];
     }
 }

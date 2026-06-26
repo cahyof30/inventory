@@ -11,6 +11,7 @@ class VehicleDetail extends Model
     protected $fillable = [
         'item_id',
         'license_plate',
+        'color',
         'engine_number',
         'chassis_number',
     ];

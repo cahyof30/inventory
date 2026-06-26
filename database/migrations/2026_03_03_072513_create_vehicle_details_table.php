@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('item_id')->constrained()->onDelete('cascade');
             $table->string('license_plate')->nullable();
+            $table->string('color')->nullable();
             $table->string('engine_number')->nullable();
             $table->string('chassis_number')->nullable();
             $table->timestamps();

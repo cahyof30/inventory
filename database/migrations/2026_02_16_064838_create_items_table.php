@@ -19,6 +19,8 @@ return new class extends Migration
             $table->enum('item_type', ['fixed_asset', 'consumable'])->default('fixed_asset');
             $table->string('name');
             $table->string('brand')->nullable();
+            $table->foreignId('pic_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('posted_by')->nullable()->constrained('users')->onDelete('set null');
             $table->decimal('purchase_price', 15,2)->nullable();
             $table->date('purchase_date')->nullable();
             $table->enum('condition', ['good', 'broken']);

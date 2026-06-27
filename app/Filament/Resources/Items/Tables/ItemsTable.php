@@ -51,20 +51,22 @@ class ItemsTable
                     ->label('No. Polisi')
                     ->visible(fn ($livewire) => $livewire->activeTab === 'kendaraan'),
                 TextColumn::make('category.name')
-                    ->label('Category')
-                    ->searchable()
+                    ->label('Kategori / Kode')
+                    ->description(fn ($record) => $record->code)
+                    ->searchable('code')
                     ->sortable()
                     ->visible(fn ($livewire) => $livewire->activeTab !== 'kendaraan'),
                 TextColumn::make('name')
-                    ->label('Nama / Kode')
-                    ->description(fn ($record) => $record->code)
-                    ->searchable(['name', 'code']),
-                TextColumn::make('brand')
-                    ->searchable(),
-                TextColumn::make('purchase_price')
-                    ->label('Purchase Price')
-                    ->money('IDR', locale: 'id')
-                    ->sortable(),
+                    ->label('Nama / Seri')
+                    ->formatStateUsing(fn ($state, $record) => "{$state} - {$record->brand}")
+                    ->description(fn ($record) => $record->specification['seri'] ?? '')
+                    ->searchable(['name', 'brand']),
+                // TextColumn::make('brand')
+                //     ->searchable(),
+                // TextColumn::make('purchase_price')
+                //     ->label('Purchase Price')
+                //     ->money('IDR', locale: 'id')
+                //     ->sortable(),
                 ImageColumn::make('image'),
                 TextColumn::make('created_at')
                     ->dateTime()

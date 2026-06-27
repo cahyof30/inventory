@@ -58,7 +58,7 @@ class ItemsTable
                     ->visible(fn ($livewire) => $livewire->activeTab !== 'kendaraan'),
                 TextColumn::make('name')
                     ->label('Nama / Seri')
-                    ->formatStateUsing(fn ($state, $record) => "{$state} - {$record->brand}")
+                    ->formatStateUsing(fn ($state, $record) => "{$state} {$record->brand}")
                     ->description(fn ($record) => $record->specification['seri'] ?? '')
                     ->searchable(['name', 'brand']),
                 // TextColumn::make('brand')

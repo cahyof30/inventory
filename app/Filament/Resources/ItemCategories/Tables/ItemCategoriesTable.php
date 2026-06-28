@@ -22,7 +22,8 @@ class ItemCategoriesTable
                     ->searchable(),
                 TextColumn::make('slug')
                     ->label('Slug')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

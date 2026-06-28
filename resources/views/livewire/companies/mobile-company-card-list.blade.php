@@ -1,0 +1,305 @@
+@php
+    use Illuminate\Support\Facades\Storage;
+    use App\Filament\Resources\Companies\CompanyResource;
+@endphp
+
+<div
+    x-data="{
+        openLogo: false,
+        logoUrl: '',
+        logoName: '',
+    }"
+>
+    {{-- Search --}}
+    <div style="position:relative; margin-bottom:14px;">
+        <div style="position:absolute; left:12px; top:50%; transform:translateY(-50%); pointer-events:none;">
+            <svg xmlns="http://www.w3.org/2000/svg" style="width:16px;height:16px;color:#9ca3af;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+            </svg>
+        </div>
+        <input
+            type="search"
+            wire:model.live.debounce.350ms="search"
+            placeholder="Cari nama atau singkatan perusahaan…"
+            style="width:100%; border-radius:12px; border:1px solid #e5e7eb; background:#fff; padding:9px 14px 9px 38px; font-size:14px; color:#111827; outline:none; box-sizing:border-box;"
+        />
+    </div>
+
+    {{-- Cards --}}
+    @forelse ($records as $record)
+        <div
+            wire:key="company-card-{{ $record->id }}"
+            style="
+                position:relative; overflow:hidden;
+                border-radius:16px; background:#fff;
+                border:1px solid #f3f4f6;
+                box-shadow:0 1px 4px rgba(0,0,0,0.06);
+                margin-bottom:10px;
+            "
+        >
+            {{-- Body --}}
+            <div style="display:flex; align-items:center; gap:14px; padding:14px;">
+
+                {{-- Logo thumbnail — klik untuk buka modal --}}
+                <div style="flex-shrink:0;">
+                    @if ($record->logo)
+                        <button
+                            type="button"
+                            @click="
+                                logoUrl  = '{{ asset('storage/' . $record->logo) }}';
+                                {{-- logoUrl  = '{{ Storage::disk('public')->url('storage/' . $record->logo) }}'; --}}
+                                logoName = @js($record->company_name);
+                                openLogo = true;
+                            "
+                            style="
+                                width:60px; height:60px;
+                                border-radius:12px;
+                                border:1.5px solid rgba(245,168,0,0.35);
+                                background:#FFFBF3;
+                                padding:4px;
+                                cursor:pointer;
+                                display:flex; align-items:center; justify-content:center;
+                                position:relative;
+                                overflow:hidden;
+                            "
+                            title="Lihat logo"
+                        >
+                            <img
+                                src="{{ Storage::disk('public')->url($record->logo) }}"
+                                alt="{{ $record->company_name }}"
+                                loading="lazy"
+                                style="width:100%;height:100%;object-fit:contain;border-radius:8px;"
+                            />
+                            {{-- zoom hint overlay --}}
+                            <div style="
+                                position:absolute; inset:0;
+                                background:rgba(61,28,2,0.0);
+                                display:flex; align-items:center; justify-content:center;
+                                border-radius:11px;
+                                transition: background 0.2s;
+                            "
+                            onmouseover="this.style.background='rgba(61,28,2,0.18)'"
+                            onmouseout="this.style.background='rgba(61,28,2,0)'"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;color:#fff;opacity:0;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+                                </svg>
+                            </div>
+                        </button>
+                    @else
+                        {{-- Placeholder monogram --}}
+                        <div style="
+                            width:60px; height:60px;
+                            border-radius:12px;
+                            border:1.5px solid rgba(245,168,0,0.25);
+                            background:linear-gradient(135deg, rgba(245,168,0,0.1), rgba(217,79,0,0.07));
+                            display:flex; align-items:center; justify-content:center;
+                        ">
+                            <span style="font-size:22px;font-weight:700;color:#D48900;line-height:1;">
+                                {{ strtoupper(substr($record->company_name, 0, 1)) }}
+                            </span>
+                        </div>
+                    @endif
+                </div>
+
+                {{-- Info --}}
+                <div style="flex:1; min-width:0;">
+                    <p style="font-size:14px;font-weight:700;color:#3D1C02;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:3px;">
+                        {{ $record->company_name }}
+                    </p>
+
+                    {{-- Slug badge --}}
+                    <span style="
+                        display:inline-block;
+                        background:rgba(245,168,0,0.12);
+                        color:#D48900;
+                        font-size:10px;
+                        font-weight:700;
+                        letter-spacing:0.1em;
+                        text-transform:uppercase;
+                        padding:2px 9px;
+                        border-radius:99px;
+                        border:1px solid rgba(245,168,0,0.25);
+                    ">
+                        {{ $record->slug }}
+                    </span>
+                </div>
+            </div>
+
+            {{-- Action row --}}
+            <div style="display:flex; border-top:1px solid #f3f4f6;">
+
+                {{-- Edit --}}
+                <a
+                    href="{{ CompanyResource::getUrl('edit', ['record' => $record]) }}"
+                    style="
+                        flex:1; display:flex; align-items:center; justify-content:center; gap:5px;
+                        padding:11px 0; font-size:11px; font-weight:600; color:#1447e6;
+                        text-decoration:none; border-right:1px solid #f3f4f6;
+                    "
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <g fill="none">
+                            <path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"/>
+                            <path fill="currentColor" d="M13 3a1 1 0 0 1 .117 1.993L13 5H5v14h14v-8a1 1 0 0 1 1.993-.117L21 11v8a2 2 0 0 1-1.85 1.995L19 21H5a2 2 0 0 1-1.995-1.85L3 19V5a2 2 0 0 1 1.85-1.995L5 3zm6.243.343a1 1 0 0 1 1.497 1.32l-.083.095l-9.9 9.899a1 1 0 0 1-1.497-1.32l.083-.094z"/>
+                        </g>
+                    </svg>
+                    Edit
+                </a>
+
+                {{-- Hapus --}}
+                <button
+                    wire:click="deleteRecord({{ $record->id }})"
+                    wire:confirm="Yakin hapus perusahaan '{{ addslashes($record->company_name) }}'?"
+                    style="
+                        flex:1; display:flex; align-items:center; justify-content:center; gap:5px;
+                        padding:11px 0; font-size:11px; font-weight:600; color:#ef4444;
+                        background:none; border:none; cursor:pointer;
+                    "
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" style="width:14px;height:14px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    Hapus
+                </button>
+
+            </div>
+        </div>
+    @empty
+        <div style="text-align:center; padding:48px 0;">
+            <div style="font-size:48px; margin-bottom:12px;">🏢</div>
+            <p style="font-size:15px; font-weight:600; color:#374151;">Belum ada perusahaan</p>
+            <p style="font-size:13px; color:#9ca3af; margin-top:4px;">
+                @if ($search)
+                    Tidak ada hasil untuk "{{ $search }}"
+                @else
+                    Tekan + Tambah untuk mulai
+                @endif
+            </p>
+        </div>
+    @endforelse
+
+    {{-- Pagination --}}
+    @if ($records->hasPages())
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:12px; margin-bottom:4px;">
+            @if ($records->onFirstPage())
+                <span style="flex:1;border-radius:12px;border:1px solid #e5e7eb;padding:10px 0;text-align:center;font-size:13px;font-weight:500;color:#d1d5db;">← Prev</span>
+            @else
+                <button wire:click="previousPage('company_page')" style="flex:1;border-radius:12px;border:1px solid #e5e7eb;background:#fff;padding:10px 0;text-align:center;font-size:13px;font-weight:600;color:#374151;cursor:pointer;">← Prev</button>
+            @endif
+
+            <span style="font-size:12px;color:#9ca3af;white-space:nowrap;">{{ $records->currentPage() }} / {{ $records->lastPage() }}</span>
+
+            @if ($records->hasMorePages())
+                <button wire:click="nextPage('company_page')" style="flex:1;border-radius:12px;background:linear-gradient(135deg,#F5A800,#D94F00);border:none;padding:10px 0;text-align:center;font-size:13px;font-weight:600;color:#fff;cursor:pointer;">Next →</button>
+            @else
+                <span style="flex:1;border-radius:12px;border:1px solid #e5e7eb;padding:10px 0;text-align:center;font-size:13px;font-weight:500;color:#d1d5db;">Next →</span>
+            @endif
+        </div>
+    @endif
+
+
+    {{-- Logo Preview Modal (SGM Theme) --}}
+    <template x-if="openLogo">
+        <div
+            x-cloak
+            x-transition.opacity
+            style="
+                position:fixed; inset:0;
+                background:rgba(26,10,0,0.6);
+                backdrop-filter:blur(6px);
+                -webkit-backdrop-filter:blur(6px);
+                display:flex; align-items:center; justify-content:center;
+                z-index:9999; padding:24px;
+            "
+            @click="openLogo = false"
+        >
+            <div
+                @click.stop
+                style="
+                    width:100%; max-width:340px;
+                    background:#FFFBF3;
+                    border-radius:24px;
+                    border:1.5px solid rgba(245,168,0,0.35);
+                    box-shadow:0 20px 60px rgba(26,10,0,0.25), 0 0 0 1px rgba(245,168,0,0.1);
+                    padding:28px 24px 24px;
+                    text-align:center;
+                    position:relative;
+                    overflow:hidden;
+                "
+            >
+                {{-- Top glow --}}
+                <div style="
+                    position:absolute; top:0; left:50%; transform:translateX(-50%);
+                    width:200px; height:90px;
+                    background:radial-gradient(ellipse at top, rgba(245,168,0,0.13) 0%, transparent 70%);
+                    pointer-events:none;
+                "></div>
+
+                {{-- Gold divider pill --}}
+                <div style="
+                    width:36px; height:3px;
+                    background:linear-gradient(90deg,#F5A800,#D94F00);
+                    border-radius:99px; margin:0 auto 16px;
+                "></div>
+
+                {{-- Label badge --}}
+                <div style="
+                    display:inline-block;
+                    background:rgba(245,168,0,0.12); color:#D48900;
+                    font-size:10px; font-weight:700; letter-spacing:0.14em;
+                    text-transform:uppercase; padding:3px 10px;
+                    border-radius:99px; margin-bottom:12px;
+                    border:1px solid rgba(245,168,0,0.25);
+                ">Logo Perusahaan</div>
+
+                {{-- Company name --}}
+                <h3
+                    x-text="logoName"
+                    style="
+                        font-size:16px; font-weight:700; color:#3D1C02;
+                        margin-bottom:20px; line-height:1.3;
+                    "
+                ></h3>
+
+                {{-- Logo frame --}}
+                <div style="
+                    display:inline-flex;
+                    padding:16px;
+                    background:#fff;
+                    border-radius:20px;
+                    border:1.5px solid rgba(245,168,0,0.3);
+                    box-shadow:0 4px 20px rgba(245,168,0,0.14);
+                ">
+                    <img
+                        :src="logoUrl"
+                        :alt="logoName"
+                        style="
+                            width:200px; height:200px;
+                            object-fit:contain;
+                            display:block;
+                            border-radius:10px;
+                        "
+                    />
+                </div>
+
+                {{-- Close button --}}
+                <button
+                    @click="openLogo = false"
+                    style="
+                        margin-top:22px; width:100%;
+                        border:none; border-radius:12px; padding:12px;
+                        background:linear-gradient(135deg,#F5A800,#D94F00);
+                        color:#fff; cursor:pointer;
+                        font-weight:700; font-size:14px;
+                        letter-spacing:0.02em;
+                        box-shadow:0 4px 14px rgba(217,79,0,0.3);
+                    "
+                >
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </template>
+
+</div>

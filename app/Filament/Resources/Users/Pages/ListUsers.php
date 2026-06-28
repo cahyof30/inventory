@@ -3,8 +3,10 @@
 namespace App\Filament\Resources\Users\Pages;
 
 use App\Filament\Resources\Users\UserResource;
+use App\Livewire\Users\MobileUserCardList;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Contracts\View\View;
 
 class ListUsers extends ListRecords
 {
@@ -15,5 +17,10 @@ class ListUsers extends ListRecords
         return [
             CreateAction::make(),
         ];
+    }
+
+    public function getFooter(): ?View
+    {
+        return view('filament.users.mobile-footer');
     }
 }

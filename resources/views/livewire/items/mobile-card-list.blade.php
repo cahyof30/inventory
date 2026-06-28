@@ -324,7 +324,7 @@
     </div>
 @endif --}}
 
-{{-- QR Code Modal --}}
+{{-- QR Code Modal (SGM Theme) --}}
 <template x-if="openQr">
     <div
         x-cloak
@@ -332,54 +332,122 @@
         style="
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,.45);
+            background: rgba(26,10,0,0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 9999;
+            padding: 20px;
         "
         @click="openQr = false"
     >
         <div
             @click.stop
             style="
-                width: 320px;
-                background: #fff;
-                border-radius: 16px;
-                padding: 24px;
+                width: 100%;
+                max-width: 320px;
+                background: #FFFBF3;
+                border-radius: 24px;
+                border: 1.5px solid rgba(245,168,0,0.35);
+                box-shadow: 0 20px 60px rgba(26,10,0,0.22), 0 0 0 1px rgba(245,168,0,0.1);
+                padding: 28px 24px 24px;
                 text-align: center;
+                position: relative;
+                overflow: hidden;
             "
         >
+            {{-- Decorative top ray accent --}}
+            <div style="
+                position: absolute;
+                top: 0; left: 50%;
+                transform: translateX(-50%);
+                width: 180px; height: 80px;
+                background: radial-gradient(ellipse at top, rgba(245,168,0,0.13) 0%, transparent 70%);
+                pointer-events: none;
+            "></div>
+
+            {{-- Gold divider pill --}}
+            <div style="
+                width: 36px; height: 3px;
+                background: linear-gradient(90deg, #F5A800, #D94F00);
+                border-radius: 99px;
+                margin: 0 auto 16px;
+            "></div>
+
+            {{-- Label badge --}}
+            <div style="
+                display: inline-block;
+                background: rgba(245,168,0,0.12);
+                color: #D48900;
+                font-size: 10px;
+                font-weight: 700;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                padding: 3px 10px;
+                border-radius: 99px;
+                margin-bottom: 10px;
+                border: 1px solid rgba(245,168,0,0.25);
+            ">QR Code Aset</div>
+
+            {{-- Item name --}}
             <h3
                 x-text="name"
-                style="font-size: 18px; font-weight: 600; margin-bottom: 18px;"
+                style="
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: #3D1C02;
+                    margin-bottom: 20px;
+                    line-height: 1.3;
+                "
             ></h3>
 
-            <div style="display: flex; justify-content: center;">
+            {{-- QR frame --}}
+            <div style="
+                display: inline-flex;
+                padding: 12px;
+                background: #fff;
+                border-radius: 16px;
+                border: 1.5px solid rgba(245,168,0,0.3);
+                box-shadow: 0 4px 16px rgba(245,168,0,0.12);
+            ">
                 <img
-                    :src="`https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=10&data=${encodeURIComponent(qr)}`"
+                    :src="`https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=6&data=${encodeURIComponent(qr)}`"
                     alt="QR Code"
-                    style="width:220px;height:220px;"
+                    style="width:200px;height:200px;display:block;"
                 />
             </div>
 
+            {{-- QR code string --}}
             <p
                 x-text="qr"
-                style="margin-top: 16px; font-size: 12px; color: #6b7280; word-break: break-all;"
+                style="
+                    margin-top: 14px;
+                    font-size: 11px;
+                    font-family: monospace;
+                    color: #8B5E3C;
+                    word-break: break-all;
+                    opacity: 0.75;
+                "
             ></p>
 
+            {{-- Close button --}}
             <button
                 @click="openQr = false"
                 style="
                     margin-top: 20px;
                     width: 100%;
                     border: none;
-                    border-radius: 10px;
-                    padding: 10px;
-                    background: #10b981;
-                    color: white;
+                    border-radius: 12px;
+                    padding: 12px;
+                    background: linear-gradient(135deg, #F5A800, #D94F00);
+                    color: #fff;
                     cursor: pointer;
-                    font-weight: 600;
+                    font-weight: 700;
+                    font-size: 14px;
+                    letter-spacing: 0.02em;
+                    box-shadow: 0 4px 14px rgba(217,79,0,0.3);
                 "
             >
                 Tutup
@@ -389,7 +457,7 @@
 </template>
 
 
-{{-- Detail Modal --}}
+{{-- Detail Modal (SGM Theme) --}}
 <div
     x-show="openDetail"
     x-transition.opacity
@@ -397,7 +465,9 @@
     style="
         position:fixed;
         inset:0;
-        background:rgba(0,0,0,.45);
+        background:rgba(26,10,0,0.55);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
         display:flex;
         align-items:flex-end;
         justify-content:center;
@@ -411,144 +481,238 @@
     style="
         width:100%;
         max-width:480px;
-        background:white;
+        background:#FFFBF3;
         border-radius:24px 24px 0 0;
-        padding:20px;
+        border-top: 1.5px solid rgba(245,168,0,0.35);
+        border-left: 1.5px solid rgba(245,168,0,0.2);
+        border-right: 1.5px solid rgba(245,168,0,0.2);
+        padding: 0 20px 28px;
         margin-top:20px;
         max-height:90vh;
         overflow:auto;
+        position: relative;
     "
 >
 
-{{-- <div style="width:48px;height:5px;background:#ddd;border-radius:999px;margin:0 auto 20px;"></div> --}}
+    {{-- Handle bar --}}
+    <div style="
+        display:flex; justify-content:center; padding:14px 0 6px;
+        position:sticky; top:0;
+        background: linear-gradient(to bottom, #FFFBF3 80%, transparent);
+        z-index:2;
+    ">
+        <div style="width:40px;height:4px;background:linear-gradient(90deg,#F5A800,#D94F00);border-radius:99px;"></div>
+    </div>
 
-<template x-if="detail.logo">
-    <img
-        :src="detail.logo"
-        style="height:48px;margin:auto;display:block;margin-bottom:15px;"
-    >
-</template>
+    {{-- Top ray accent --}}
+    <div style="
+        position: absolute;
+        top: 0; left: 50%;
+        transform: translateX(-50%);
+        width: 260px; height: 100px;
+        background: radial-gradient(ellipse at top, rgba(245,168,0,0.1) 0%, transparent 70%);
+        pointer-events: none;
+    "></div>
 
-<img
-    :src="detail.image"
-    style="
-        width:120px;
-        height:120px;
-        object-fit:cover;
-        border-radius:16px;
-        display:block;
-        margin:auto;
-        border:1px solid #eee;
-    "
->
+    {{-- Image --}}
+    <div style="display:flex;justify-content:center;margin-top:4px;">
+        <div style="
+            padding: 4px;
+            background: #fff;
+            border-radius: 20px;
+            border: 1.5px solid rgba(245,168,0,0.3);
+            box-shadow: 0 4px 20px rgba(245,168,0,0.14);
+        ">
+            <img
+                :src="detail.image"
+                style="
+                    width:110px;
+                    height:110px;
+                    object-fit:cover;
+                    border-radius:16px;
+                    display:block;
+                "
+            >
+        </div>
+    </div>
 
-<h2
-    x-text="detail.name"
-    style="
-        text-align:center;
-        margin-top:18px;
-        font-size:20px;
-        font-weight:700;
-    "
-></h2>
+    {{-- Name --}}
+    <h2
+        x-text="detail.name"
+        style="
+            text-align:center;
+            margin-top:14px;
+            font-size:19px;
+            font-weight:700;
+            color: #3D1C02;
+            line-height:1.3;
+        "
+    ></h2>
 
-<p
-    x-text="detail.code"
-    style="
-        text-align:center;
-        color:#9ca3af;
-        font-size:13px;
-        margin-bottom:20px;
-    "
-></p>
+    {{-- Code --}}
+    <p
+        x-text="detail.code"
+        style="
+            text-align:center;
+            color:#8B5E3C;
+            font-size:12px;
+            font-family:monospace;
+            margin-top:4px;
+            margin-bottom:14px;
+            opacity:0.75;
+        "
+    ></p>
 
-<div
-    style="
-        display:inline-flex;
-        padding:5px 12px;
-        border-radius:999px;
-        background:#dcfce7;
-        color:#166534;
-        font-size:12px;
-        font-weight:600;
-        margin:auto;
+    {{-- Verified badge --}}
+    <div style="
         display:flex;
-        width:max-content;
+        justify-content:center;
         margin-bottom:20px;
-    "
->
-    ✔ Verified
-</div>
-
-<div style="display:grid;gap:12px;">
-
-    <div style="background:#f9fafb;padding:14px;border-radius:14px;">
-        <div style="font-size:11px;color:#9ca3af;">🏢 Perusahaan</div>
-        <div x-text="detail.company" style="font-weight:600;"></div>
+    ">
+        <span style="
+            display:inline-flex;
+            align-items:center;
+            gap:5px;
+            padding:4px 14px;
+            border-radius:99px;
+            background: rgba(245,168,0,0.12);
+            border: 1px solid rgba(245,168,0,0.3);
+            color: #D48900;
+            font-size:11px;
+            font-weight:700;
+            letter-spacing:0.08em;
+            text-transform:uppercase;
+        ">
+            ✔ Terverifikasi
+        </span>
     </div>
 
-    <div style="background:#f9fafb;padding:14px;border-radius:14px;">
-        <div style="font-size:11px;color:#9ca3af;">📍 Lokasi</div>
-        <div x-text="detail.location" style="font-weight:600;"></div>
+    {{-- Info rows --}}
+    <div style="display:grid;gap:8px;">
+
+        <div style="
+            background:#fff;
+            padding:13px 16px;
+            border-radius:14px;
+            border: 1px solid rgba(245,168,0,0.2);
+            display:flex; align-items:center; gap:12px;
+        ">
+            <span style="font-size:18px;line-height:1;">🏢</span>
+            <div>
+                <div style="font-size:10px;color:#8B5E3C;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;">Perusahaan</div>
+                <div x-text="detail.company" style="font-weight:600;color:#3D1C02;font-size:14px;margin-top:1px;"></div>
+            </div>
+        </div>
+
+        <div style="
+            background:#fff;
+            padding:13px 16px;
+            border-radius:14px;
+            border: 1px solid rgba(245,168,0,0.2);
+            display:flex; align-items:center; gap:12px;
+        ">
+            <span style="font-size:18px;line-height:1;">📍</span>
+            <div>
+                <div style="font-size:10px;color:#8B5E3C;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;">Lokasi</div>
+                <div x-text="detail.location" style="font-weight:600;color:#3D1C02;font-size:14px;margin-top:1px;"></div>
+            </div>
+        </div>
+
+        <div style="
+            background:#fff;
+            padding:13px 16px;
+            border-radius:14px;
+            border: 1px solid rgba(245,168,0,0.2);
+            display:flex; align-items:center; gap:12px;
+        ">
+            <span style="font-size:18px;line-height:1;">🏷</span>
+            <div>
+                <div style="font-size:10px;color:#8B5E3C;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;">Kategori</div>
+                <div x-text="detail.category" style="font-weight:600;color:#3D1C02;font-size:14px;margin-top:1px;"></div>
+            </div>
+        </div>
+
+        <div style="
+            background:#fff;
+            padding:13px 16px;
+            border-radius:14px;
+            border: 1px solid rgba(245,168,0,0.2);
+            display:flex; align-items:center; gap:12px;
+        ">
+            <span style="font-size:18px;line-height:1;">🏭</span>
+            <div>
+                <div style="font-size:10px;color:#8B5E3C;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;">Brand</div>
+                <div x-text="detail.brand" style="font-weight:600;color:#3D1C02;font-size:14px;margin-top:1px;"></div>
+            </div>
+        </div>
+
+        {{-- Price highlight --}}
+        <div style="
+            background: linear-gradient(135deg, rgba(245,168,0,0.12), rgba(217,79,0,0.08));
+            padding:14px 16px;
+            border-radius:14px;
+            border: 1.5px solid rgba(245,168,0,0.3);
+            display:flex; align-items:center; gap:12px;
+        ">
+            <span style="font-size:18px;line-height:1;">💰</span>
+            <div>
+                <div style="font-size:10px;color:#8B5E3C;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;">Nilai Aset</div>
+                <div x-text="detail.price" style="font-weight:700;font-size:18px;color:#D48900;margin-top:1px;"></div>
+            </div>
+        </div>
+
     </div>
 
-    <div style="background:#f9fafb;padding:14px;border-radius:14px;">
-        <div style="font-size:11px;color:#9ca3af;">🏷 Kategori</div>
-        <div x-text="detail.category" style="font-weight:600;"></div>
+    {{-- Action buttons --}}
+    <div style="display:flex;gap:10px;margin-top:20px;">
+
+        <button
+            @click="
+                qr='{{ '' }}';
+                qr=detail.code;
+                openDetail=false;
+                openQr=true;
+            "
+            style="
+                flex:1;
+                background: linear-gradient(135deg, #F5A800, #D94F00);
+                color:#fff;
+                border:none;
+                border-radius:14px;
+                padding:13px 12px;
+                font-weight:700;
+                font-size:13px;
+                cursor:pointer;
+                box-shadow: 0 4px 14px rgba(217,79,0,0.28);
+                display:flex; align-items:center; justify-content:center; gap:6px;
+            "
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                <path d="M14 14h.01M14 19h.01M19 14h.01M19 19h.01"/>
+            </svg>
+            QR Code
+        </button>
+
+        <button
+            @click="openDetail=false"
+            style="
+                flex:1;
+                background:#fff;
+                border: 1.5px solid rgba(245,168,0,0.35);
+                border-radius:14px;
+                padding:13px 12px;
+                font-weight:600;
+                font-size:13px;
+                color:#3D1C02;
+                cursor:pointer;
+                display:flex; align-items:center; justify-content:center; gap:6px;
+            "
+        >
+            Tutup
+        </button>
+
     </div>
-
-    <div style="background:#f9fafb;padding:14px;border-radius:14px;">
-        <div style="font-size:11px;color:#9ca3af;">🏭 Brand</div>
-        <div x-text="detail.brand" style="font-weight:600;"></div>
-    </div>
-
-    <div style="background:#FEF3C7;padding:14px;border-radius:14px;">
-        <div style="font-size:11px;color:#92400E;">💰 Nilai Aset</div>
-        <div
-            x-text="detail.price"
-            style="font-weight:700;font-size:18px;color:#B45309;"
-        ></div>
-    </div>
-
-</div>
-
-<div style="display:flex;gap:10px;margin-top:22px;">
-
-    <button
-        @click="
-            qr='{{ '' }}';
-            qr=detail.code;
-            openDetail=false;
-            openQr=true;
-        "
-        style="
-            flex:1;
-            background:#10b981;
-            color:white;
-            border:none;
-            border-radius:12px;
-            padding:12px;
-            font-weight:600;
-        "
-    >
-        QR Code
-    </button>
-
-    <button
-        @click="openDetail=false"
-        style="
-            flex:1;
-            background:#f3f4f6;
-            border:none;
-            border-radius:12px;
-            padding:12px;
-            font-weight:600;
-        "
-    >
-        Tutup
-    </button>
-
-</div>
 
 </div>
 

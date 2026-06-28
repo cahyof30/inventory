@@ -52,6 +52,11 @@ class ListItems extends ListRecords
         ];
     }
 
+ public function switchTab(string $tab): void
+    {
+        $this->activeTab = $tab;
+        $this->resetPage('card_page');
+    }
     public function getFooter(): ?View
     {
         return view('livewire.items.mobile-card-footer', [

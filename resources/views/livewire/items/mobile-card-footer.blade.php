@@ -32,5 +32,6 @@
 
 {{-- Card list: hanya render di mobile via CSS --}}
 <div class="mobile-card-list-wrapper">
-    <livewire:items.mobile-card-list :activeTab="$activeTab" />
+   <livewire:items.mobile-card-list />
+
 </div>

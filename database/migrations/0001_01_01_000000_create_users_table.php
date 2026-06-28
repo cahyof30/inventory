@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->enum('role', ['ga', 'staf'])->default('staf');
             $table->string('position')->nullable();
-           $table->foreignId('division_id')->nullable()->constrained('divisions')->onDelete('set null');
+            $table->foreignId('division_id')->nullable()->constrained('divisions')->onDelete('set null');
+            $table->enum('gender', ['M', 'F'])->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

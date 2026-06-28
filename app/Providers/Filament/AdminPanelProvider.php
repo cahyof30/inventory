@@ -2,7 +2,7 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Auth\Login as SGMLogin; 
+use App\Filament\Auth\Login as SGMLogin;
 use App\Filament\Pages\Dashboard;
 use App\Filament\Widgets\ItemConditionChart;
 use App\Filament\Widgets\QuickActions;
@@ -32,8 +32,15 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-
-           ->login(SGMLogin::class)
+            ->favicon(asset('icon-sgm.ico'))
+            // --- TAMBAHKAN LINE DI BAWAH INI ---
+            ->brandLogo(asset('assets/logo-dashboard.png')) 
+            // Optional: Mengatur tinggi logo agar pas di navbar
+            ->brandLogoHeight('3.5rem') 
+            // ----------------------------------
+            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
+            // ... konfigurasi lainnya
+            ->login(SGMLogin::class)
             ->colors([
                 'primary' => Color::Amber,
             ])

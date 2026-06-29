@@ -2,6 +2,7 @@
 
 use App\Filament\Pages\AssetDetail;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ItemTemplateController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PngController;
 use App\Http\Controllers\PublicAssetController;
@@ -56,7 +57,8 @@ Route::get(
 )->name('png.sticker-a3');
 Route::get('/scan/{uuid}', [ItemController::class, 'scan'])
     ->name('items.scan');
-
+Route::get('/items/template/download', [ItemTemplateController::class, 'download'])
+    ->name('items.template.download');
 // Route::get('/scan/{uuid}', function ($uuid) {
 
 //     return view('pages.item', [

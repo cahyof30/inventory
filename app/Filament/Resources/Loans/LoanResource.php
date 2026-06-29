@@ -26,6 +26,8 @@ class LoanResource extends Resource
     protected static ?string $navigationLabel = 'Peminjaman';
     protected static ?string $title = 'Master Peminjaman';
 
+    // Disembunyikan dari navigasi — digantikan oleh PeminjamanPage
+    protected static bool $shouldRegisterNavigation = false;
 
     public static function form(Schema $schema): Schema
     {

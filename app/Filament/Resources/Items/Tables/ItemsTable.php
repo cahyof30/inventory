@@ -24,6 +24,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\HtmlString;
 use Maatwebsite\Excel\Facades\Excel;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Torgodly\Html2Media\Actions\Html2MediaAction;
@@ -67,7 +68,8 @@ class ItemsTable
                 //     ->label('Purchase Price')
                 //     ->money('IDR', locale: 'id')
                 //     ->sortable(),
-                ImageColumn::make('image'),
+                ImageColumn::make('image')
+                ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -117,6 +119,21 @@ class ItemsTable
                         ->label('Import Excel (Peralatan)')
                         ->icon('heroicon-o-tv')
                         ->color('success')
+                        ->modalDescription(new HtmlString('
+                            <div class="rounded-lg border border-blue-200 bg-blue-50 p-3 mb-2 flex items-center justify-between gap-3">
+                                <div class="flex items-center gap-2 text-sm text-blue-700">
+                                    <x-heroicon-o-information-circle class="w-5 h-5 shrink-0" />
+                                    <span>Belum punya template? Download dulu dan sesuaikan datanya sebelum upload.</span>
+                                </div>
+                                <a
+                                    href="' . route('items.template.download') . '"
+                                    class="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-blue-500 whitespace-nowrap"
+                                >
+                                    <x-heroicon-o-arrow-down-tray class="w-4 h-4" />
+                                    Download Template
+                                </a>
+                            </div>
+                        '))
                         ->form([
                             FileUpload::make('file')
                                 ->label('File Excel (.xlsx / .csv)')
@@ -126,13 +143,13 @@ class ItemsTable
                         ])
                         ->action(function (array $data) {
                             $filePath = Storage::disk('public')->path($data['file']);
-
+ 
                             try {
                                 $import = new ItemImport;
                                 Excel::import($import, $filePath);
-
+ 
                                 Storage::disk('public')->delete($data['file']);
-
+ 
                                 static::sendImportNotification(
                                     $import->successCount,
                                     $import->failures
@@ -146,7 +163,7 @@ class ItemsTable
                                     ->send();
                             }
                         }),
-
+ 
                 ])
                     ->label('Import')
                     ->icon('heroicon-o-arrow-up-tray')

@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Auth\Login as SGMLogin;
 use App\Filament\Pages\Dashboard;
+use App\Filament\Pages\PeminjamanPage;
 use App\Filament\Widgets\ItemConditionChart;
 use App\Filament\Widgets\QuickActions;
 use Filament\Http\Middleware\Authenticate;
@@ -48,6 +49,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
                 Dashboard::class,
+                PeminjamanPage::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
@@ -82,7 +84,9 @@ class AdminPanelProvider extends PanelProvider
                             ->isActive(fn () => request()->is('admin')),
                         MobileBottomNavItem::make('Peminjaman')
                             ->icon('heroicon-o-arrow-path')
-                            ->url('/admin/loans'),
+                            ->activeIcon('heroicon-s-arrow-path')
+                            ->url('/admin/peminjaman')                  // ← URL baru
+                            ->isActive(fn () => request()->is('admin/peminjaman*')),
                         MobileBottomNavItem::make('Scan QR')
                             ->icon('heroicon-o-qr-code')
                             ->url('/admin/scan-qr'),
